@@ -57,19 +57,20 @@ const Signup = () => {
   };
 
   return (
-    <div>
+    <div className="SignupPage">
+        <ul className="SignupFields">
       <h1>Signup</h1>
       <form onSubmit={handleSubmit}>
-        <label>
+      <ol> <label>
           Profile Image
           <input
             name="profileImage"
             type="file"
             accept="image/*"
             onChange={handleFileInput}
-          />
-        </label>
-        <label>
+          /> 
+        </label> </ol>
+        <ol><label>
           First Name
           <input
             name="firstName"
@@ -77,8 +78,8 @@ const Signup = () => {
             value={newUser.firstName}
             onChange={handleTextInput}
           />
-        </label>
-        <label>
+        </label> </ol>
+        <ol><label>
           Last Name
           <input
             name="lastName"
@@ -86,8 +87,8 @@ const Signup = () => {
             value={newUser.lastName}
             onChange={handleTextInput}
           />
-        </label>
-        <label>
+        </label> </ol> 
+        <ol><label>
           Username
           <input
             name="username"
@@ -95,8 +96,8 @@ const Signup = () => {
             value={newUser.username}
             onChange={handleTextInput}
           />
-        </label>
-        <label>
+        </label> </ol>
+        <ol>  <label>
           Email
           <input
             name="email"
@@ -104,8 +105,8 @@ const Signup = () => {
             value={newUser.email}
             onChange={handleTextInput}
           />
-        </label>
-        <label>
+        </label></ol>
+        <ol>  <label>
           Password
           <input
             name="password"
@@ -113,10 +114,11 @@ const Signup = () => {
             value={newUser.password}
             onChange={handleTextInput}
           />
-        </label>
+        </label> </ol>
 
-        <button type="submit">Signup</button>
+        <ol>   <button type="submit">Signup</button> </ol>
       </form>
+      </ul>
     </div>
   );
 };
