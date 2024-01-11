@@ -57,20 +57,19 @@ const Signup = () => {
   };
 
   return (
-    <div className="SignupPage">
-        <ul className="SignupFields">
+    <div className="signup-page">
       <h1>Signup</h1>
-      <form onSubmit={handleSubmit}>
-      <ol> <label>
+      <form className="signup-form" onSubmit={handleSubmit}>
+        <label>
           Profile Image
           <input
             name="profileImage"
             type="file"
             accept="image/*"
             onChange={handleFileInput}
-          /> 
-        </label> </ol>
-        <ol><label>
+          />
+        </label>
+        <label>
           First Name
           <input
             name="firstName"
@@ -78,8 +77,8 @@ const Signup = () => {
             value={newUser.firstName}
             onChange={handleTextInput}
           />
-        </label> </ol>
-        <ol><label>
+        </label>
+        <label>
           Last Name
           <input
             name="lastName"
@@ -87,8 +86,8 @@ const Signup = () => {
             value={newUser.lastName}
             onChange={handleTextInput}
           />
-        </label> </ol> 
-        <ol><label>
+        </label>
+        <label>
           Username
           <input
             name="username"
@@ -96,8 +95,8 @@ const Signup = () => {
             value={newUser.username}
             onChange={handleTextInput}
           />
-        </label> </ol>
-        <ol>  <label>
+        </label>
+        <label>
           Email
           <input
             name="email"
@@ -105,8 +104,8 @@ const Signup = () => {
             value={newUser.email}
             onChange={handleTextInput}
           />
-        </label></ol>
-        <ol>  <label>
+        </label>
+        <label>
           Password
           <input
             name="password"
@@ -114,11 +113,10 @@ const Signup = () => {
             value={newUser.password}
             onChange={handleTextInput}
           />
-        </label> </ol>
-
-        <ol>   <button type="submit">Signup</button> </ol>
+        </label>
+        <button onClick={() => navigate("/login")}>Back</button>
+        <button type="submit">Signup</button>{" "}
       </form>
-      </ul>
     </div>
   );
 };

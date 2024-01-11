@@ -1,8 +1,8 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import {get} from "../services/SERVER_URL"; 
+// import {get} from "../services/SERVER_URL";
 
 /* const UserContext = createContext();
 
@@ -30,4 +30,3 @@ const CoffeeProvider = ({ children }) => {
   };
   
   export { CoffeeContext, CoffeeProvider }; */
-  
