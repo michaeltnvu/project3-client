@@ -9,9 +9,8 @@ const Navbar = () => {
     <nav className="navbar">
       {getToken() && (
         <div className="navbar-container">
-          <Link to="/" style={{ textDecoration: "none" }}>
-            Home
-          </Link>
+          <Link to="/">Home</Link>
+          <Link to="/explore">Explore</Link>
           <Link to="/profile" style={{ textDecoration: "none" }}>
             Profile
           </Link>
