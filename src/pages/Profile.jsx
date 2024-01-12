@@ -1,36 +1,27 @@
-// import axios from "axios";
-// import { useContext, useEffect, useState } from "react";
-// import { UserContext } from "../context/user.context";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/auth.context";
+import { SERVER_URL } from "../services/SERVER_URL";
 
-/*const API_URL = import
+const Profile = () => {
+  const { user } = useContext(AuthContext);
 
-function ProductsPage() {
+  console.log("user ->", user);
+  return (
+    <div className="userProfile">
+      <h1>Profile</h1>
+      <div>
+        <img src={""} />
+        <p> First Name: {}</p>
+        <p>Last Name: {}</p>
+        <p>Followers: {}</p>
+        <p>Following: {}</p>
+        <p>Bio: {}</p>
+        <img src={""} />
+        <img src={""} />
+        <img src={""} />
+      </div>
+    </div>
+  );
+};
 
-    const { coffees, fetchCoffees } = useContext(CoffeeContext)
-  
-    useEffect(() => {
-      if (!coffees.length) {
-        fetchCoffees();
-      }
-    }, []); */
-
-// const Profile = () => {
-//   return (
-//     <div className="UserProfile">
-//       <h1>Profile</h1>
-//       <div>
-//       <img src={}> Profile Image</img>
-//       <p> First Name: {}</p>
-//       <p>Last Name:  {}</p>
-//       <p>Followers:  {}</p>
-//       <p>Following:  {}</p>
-//       <p>Bio:  {}</p>
-//       <img src={}> Post Image 1</img>
-//       <img src={}> Post Image 2</img>
-//       <img src={}> Post Image 3</img>
-//     </div>
-//     </div>
-//   );
-// };
-
-// export default Profile;
+export default Profile;

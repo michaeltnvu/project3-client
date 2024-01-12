@@ -1,9 +1,5 @@
-// src/context/auth.context.jsx
-
-import { createContext, useState, useEffect } from "react";
-
+import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { get } from "../services/authService";
 
 const AuthContext = createContext();
@@ -12,15 +8,13 @@ function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const storeToken = (token) => {
-    //  <==  ADD
     localStorage.setItem("authToken", token);
   };
 
   const removeToken = () => {
-    // <== ADD
     // Upon logout, remove the token from the localStorage
     localStorage.removeItem("authToken");
   };
@@ -30,7 +24,6 @@ function AuthProvider({ children }) {
   };
 
   const authenticateUser = () => {
-    //  <==  ADD
     // Get the stored token from the localStorage
     const storedToken = localStorage.getItem("authToken");
 
@@ -63,21 +56,16 @@ function AuthProvider({ children }) {
   };
 
   const logOutUser = () => {
-    // <== ADD
     // To log out the user, remove the token
     removeToken();
     // and update the state variables
     authenticateUser();
-    navigate('/')
+    navigate("/");
   };
 
   useEffect(() => {
-    authenticateUser(); //  <==  ADD
+    authenticateUser();
   }, []);
-  /* 
-    Functions for handling the authentication status (isLoggedIn, isLoading, user)
-    will be added here later in the next step
-  */
 
   return (
     <AuthContext.Provider
@@ -95,4 +83,4 @@ function AuthProvider({ children }) {
   );
 }
 
-export { AuthProvider, AuthContext };
+export { AuthContext, AuthProvider };

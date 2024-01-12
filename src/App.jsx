@@ -5,7 +5,7 @@ import { AuthContext } from "./context/auth.context";
 import "./index.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-// import Profile from "./pages/Profile";
+import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
 
         <Route element={<IsLoggedIn />}>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/profile" element={<Profile />} /> */}
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </>
