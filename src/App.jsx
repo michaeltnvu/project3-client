@@ -12,7 +12,14 @@ function App() {
   const { getToken } = useContext(AuthContext);
 
   const IsLoggedIn = () => {
-    return getToken() ? <Outlet /> : <Navigate to="/login" />;
+    return getToken() ? (
+      <>
+        <Navbar />
+        <Outlet />
+      </>
+    ) : (
+      <Navigate to="/login" />
+    );
   };
 
   const IsLoggedOut = () => {
@@ -21,8 +28,6 @@ function App() {
 
   return (
     <>
-      <Navbar />
-
       <Routes>
         <Route element={<IsLoggedOut />}>
           <Route path="/login" element={<Login />} />
