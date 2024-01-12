@@ -20,23 +20,23 @@ const Signup = () => {
 
   const { storeToken, authenticateUser } = useContext(AuthContext);
 
-  const handleFileInput = (e) => {
-    const file = e.target.files[0];
+  // const handleFileInput = (e) => {
+  //   const file = e.target.files[0];
 
-    if (file) {
-      const maxSizeInBytes = 2048 * 2048; // 2 MB
-      if (file.size > maxSizeInBytes) {
-        console.error("File size exceeds the limit.");
-        return;
-      }
-      const reader = new FileReader();
+  //   if (file) {
+  //     const maxSizeInBytes = 2048 * 2048; // 2 MB
+  //     if (file.size > maxSizeInBytes) {
+  //       console.error("File size exceeds the limit.");
+  //       return;
+  //     }
+  //     const reader = new FileReader();
 
-      reader.onloadend = () => {
-        setNewUser((prev) => ({ ...prev, profileImage: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  //     reader.onloadend = () => {
+  //       setNewUser((prev) => ({ ...prev, profileImage: reader.result }));
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const handleTextInput = (e) => {
     setNewUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
