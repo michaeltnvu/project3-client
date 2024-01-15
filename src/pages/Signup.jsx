@@ -69,7 +69,7 @@ const Signup = () => {
             </h1>
             <img
               className="w-80 mt-5 pl-10 pt-20 "
-              src="../src/assets/compass-icon.png"
+              src="../src/assets/logo-white-vertical.png"
             />
           </div>
 
