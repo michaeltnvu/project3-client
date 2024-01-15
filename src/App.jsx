@@ -7,7 +7,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
-import CreatePost from "./components/CreatePost"; 
+import CreatePost from "./components/CreatePost";
 
 function App() {
   const { getToken } = useContext(AuthContext);
@@ -15,8 +15,8 @@ function App() {
   const IsLoggedIn = () => {
     return getToken() ? (
       <>
-        <Navbar/>
-        <CreatePost/> 
+        <Navbar />
+        <CreatePost />
         <Outlet />
       </>
     ) : (
@@ -38,7 +38,7 @@ function App() {
 
         <Route element={<IsLoggedIn />}>
           <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />}/> 
+          <Route path="/explore" element={<Explore />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
