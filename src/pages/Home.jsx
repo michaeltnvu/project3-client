@@ -10,7 +10,8 @@ const Home = () => {
       <h1>Post Explore Page</h1>
       {posts.map((post) => (
         <div key={post.id}>
-          <p>{post.content}</p>
+          <p>Location: {post.location}</p>
+          <p>Caption: {post.caption}</p>
         </div>
       ))}
       {/* <button onClick={() => addPost({ content: 'New Post' })}>
