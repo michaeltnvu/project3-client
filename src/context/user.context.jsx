@@ -2,9 +2,9 @@ import { createContext, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-// import {get} from "../services/SERVER_URL";
+ import {get} from "../services/SERVER_URL";
 
-/* const UserContext = createContext();
+ const UserContext = createContext();
 
 const CoffeeProvider = ({ children }) => {
     const [coffees, setCoffees] = useState([]);
@@ -29,4 +29,4 @@ const CoffeeProvider = ({ children }) => {
     );
   };
   
-  export { CoffeeContext, CoffeeProvider }; */
+  export { CoffeeContext, CoffeeProvider }; 

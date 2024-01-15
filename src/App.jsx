@@ -14,7 +14,7 @@ function App() {
   const IsLoggedIn = () => {
     return getToken() ? (
       <>
-        <Navbar />
+        <Navbar/>
         <Outlet />
       </>
     ) : (
@@ -36,7 +36,7 @@ function App() {
 
         <Route element={<IsLoggedIn />}>
           <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
+          <Route path="/explore" element={<Explore />}/> 
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>

@@ -36,20 +36,29 @@ const Login = () => {
       style={{ background: "url(../src/assets/signup-background.png)" }}
     >
       <div className="container py-20 flex items-center justify-center mx-auto">
-        <div className="flex w-2/12 bg-white rounded-xl shadow-xl overflow-hidden">
-          <form className="login-form" onSubmit={handleSubmit}>
-            <div className="text-3xl mb mt-5 flex items-center justify-center">
-              <h1>Login</h1>
-            </div>
+        <div className="flex w-8/12 bg-white rounded-xl shadow-xl overflow-hidden">
+        <div className="w 1/2 py-16 px-12 bg-gradient-to-r from-cyan-500 to-blue-500">
+        <h1 className="text-white">
+              Welcome back! What adventure will you share today?
+            </h1>
+            <img
+              className="w-80 mt-5 pl-10 pt-20 "
+              src="../src/assets/logo-white-vertical.png"
+            />
+          </div>
 
-            <div className="mt-7 pl-8">
+        <div className="w 1/2 py-16 px-12">
+        <h1 className="text-3xl mb">Login</h1>
+        <div>
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="mt-5">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 for="Email"
               >
                 Email:
                 <input
-                  className="shadow appearance-none border rounded w-100 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="email"
                   type="email"
                   value={user.email}
@@ -58,14 +67,14 @@ const Login = () => {
               </label>
             </div>
 
-            <div className="mt-7 pl-8">
+            <div className="mt-5">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 for="Password"
               >
                 Password:
                 <input
-                  className="shadow appearance-none border rounded w-100 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   name="password"
                   type="password"
                   value={user.password}
@@ -97,6 +106,8 @@ const Login = () => {
           </form>
         </div>
       </div>
+      </div>
+    </div>
     </div>
   );
 };
