@@ -5,13 +5,13 @@ import App from "./App.jsx";
 import "./index.css";
 
 import { AuthProvider } from "./context/auth.context.jsx";
-import { PostProvider } from "./context/post.context.jsx"
+import { PostProvider } from "./context/post.context.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <AuthProvider>
       <PostProvider>
-      <App />
+        <App />
       </PostProvider>
     </AuthProvider>
   </BrowserRouter>

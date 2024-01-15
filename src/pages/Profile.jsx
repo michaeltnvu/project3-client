@@ -16,8 +16,6 @@ const Profile = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log("userProfile", userProfile);
-
   if (isLoading) {
     return <span>Loading...</span>;
   }
@@ -67,13 +65,9 @@ const Profile = () => {
       </div>
 
       <div className="flex flex-row gap-20 h-400">
-        {posts.map((element) => {
+        {posts.map((post) => {
           return (
-            <img
-              key={element.media[0]._id}
-              src={element.media[0].url}
-              alt="post images"
-            />
+            <img key={post._id} src={post.media[0].url} alt="post images" />
           );
         })}
       </div>
