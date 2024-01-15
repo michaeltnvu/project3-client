@@ -16,6 +16,8 @@ const Profile = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  console.log("userProfile", userProfile);
+
   if (isLoading) {
     return <span>Loading...</span>;
   }
@@ -37,29 +39,43 @@ const Profile = () => {
       <div className="user-banner ">
         <img className="py-10" src={bannerImage} alt="banner image" />
         <div className="user-image ">
-          <img className="absolute top-30 left-50" src={profileImage} alt="profile image" />
+          <img
+            className="top-30 left-50"
+            src={profileImage}
+            alt="profile image"
+          />
         </div>
       </div>
 
       <div className="user-info bg-gray-500">
         <div className="user-name flex flex-row gap-20">
-          {`Firstname:${firstName} Lastname:${lastName}`}
-          <div className="user-stats-followers">{followers.length} Followers</div>
-        <div className="user-stats-following">{following.length} Following</div>
+          {`${firstName} ${lastName}`}
+          <div className="user-stats-posts mt-20 bg-gray-600">
+            {posts.length} Posts
+          </div>
+          <div className="user-stats-followers">
+            {followers.length} Followers
+          </div>
+          <div className="user-stats-following">
+            {following.length} Following
+          </div>
         </div>
-        <div className="user-handle"> Username:@{username}</div>
+        <div className="user-handle">@{username}</div>
       </div>
-      <div className="user-bio mt-20  bg-gray-600">Bio:{bio}</div>
-      <div className="user-stats-posts mt-20 bg-gray-600">{posts.length}Posts</div>
-      
+      <div className="user-bio mt-20  bg-gray-600">
+        Hi, my name is {firstName}
+      </div>
 
-      <div className="user-posts ">
-      hello
-      {posts.map(post => {
-        get(`/posts/${post}`)
-          .then(res => console.log(res.data))
-          .catch(err => console.log("can't get posts"))
-      })}
+      <div className="flex flex-row gap-20 h-400">
+        {posts.map((element) => {
+          return (
+            <img
+              key={element.media[0]._id}
+              src={element.media[0].url}
+              alt="post images"
+            />
+          );
+        })}
       </div>
     </div>
   );
