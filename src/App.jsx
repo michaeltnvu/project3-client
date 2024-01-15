@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
+import CreatePost from "./components/CreatePost"; 
 
 function App() {
   const { getToken } = useContext(AuthContext);
@@ -15,6 +16,7 @@ function App() {
     return getToken() ? (
       <>
         <Navbar/>
+        <CreatePost/> 
         <Outlet />
       </>
     ) : (
