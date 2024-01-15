@@ -1,8 +1,7 @@
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
 import { useState } from "react";
 
-function CreatePost() {
-  const [openModal, setOpenModal] = useState(false);
+function CreatePost({ openModal, setOpenModal }) {
   const [reqBody, setReqBody] = useState({
     media: {
       type: "",
@@ -26,7 +25,6 @@ function CreatePost() {
 
   return (
     <>
-      <Button onClick={() => setOpenModal(true)}>Toggle modal</Button>
       <Modal show={openModal} size="md" onClose={onCloseModal} popup>
         <Modal.Header />
         <Modal.Body>

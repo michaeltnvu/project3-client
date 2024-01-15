@@ -1,5 +1,6 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import CreatePost from "./components/CreatePost";
 import Navbar from "./components/Navbar";
 import { AuthContext } from "./context/auth.context";
 import Explore from "./pages/Explore";
@@ -7,16 +8,16 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
-import CreatePost from "./components/CreatePost";
 
 function App() {
   const { getToken } = useContext(AuthContext);
+  const [openModal, setOpenModal] = useState(false);
 
   const IsLoggedIn = () => {
     return getToken() ? (
       <>
-        <Navbar />
-        <CreatePost />
+        <Navbar setOpenModal={setOpenModal} />
+        <CreatePost openModal={openModal} setOpenModal={setOpenModal} />
         <Outlet />
       </>
     ) : (
