@@ -60,7 +60,13 @@ function CreatePost({ openModal, setOpenModal }) {
 
   return (
     <>
-      <Modal show={openModal} size="md" onClose={onCloseModal} popup>
+      <Modal
+        show={openModal}
+        size="md"
+        onClose={onCloseModal}
+        dismissible
+        popup
+      >
         <Modal.Header />
         <Modal.Body>
           <div>
