@@ -11,9 +11,9 @@ const Home = () => {
   return (
     <div>
       <h1>Home</h1>
-      <div className="home-posts flex flex-row gap-10">
+      <div className="home-posts flex flex-row items-center justify-center gap-10">
         {posts.map((post) => {
-          return <img key={post._id} src={post.media[0].url} />;
+          return <img className="w-80 h-80 p-8 shadow-2xl" key={post._id} src={post.media[0].url} />;
         })}
       </div>
     </div>
