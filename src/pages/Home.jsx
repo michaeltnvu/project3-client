@@ -12,16 +12,16 @@ const Home = () => {
     <div>
       <div className="home-posts flex flex-wrap items-center justify-center gap-10">
         {posts &&
-          posts.map((post) => {
-            return (
+          posts.map((post) => (
+<div> 
               <img
                 className="w-80 h-80 p-8 shadow-2xl"
                 key={post._id}
                 src={post.media[0].url}
               />
               <span className="">{post.location}</span>
-            );
-          })}
+              </div>
+            ))}
       </div>
     </div>
   );

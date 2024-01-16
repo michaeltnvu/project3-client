@@ -77,20 +77,8 @@ export const EditPost = ({
         <Modal.Body>
           <div className="space-y-6">
             {/* Display existing post details */}
+            
             <div>
-              <div className="Media mb-2 block">
-                <Label htmlFor="mediaType" value="Media Type" />
-                <select
-                  id="mediaType"
-                  onChange={(event) =>
-                    handleMediaChange("type", event.target.value)
-                  }
-                  value={editedPost.media.type}
-                  required
-                >
-                  <option value="image">Image</option>
-                </select>
-              </div>
               <div className="Media mb-2 block">
                 <Label htmlFor="mediaUrl" value="Media URL" />
                 <TextInput

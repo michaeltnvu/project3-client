@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { get, post } from "../services/authService";
+import { get, post, put, axiosDelete } from "../services/authService";
 
 const PostContext = createContext();
 
@@ -37,7 +37,7 @@ export const PostProvider = ({ children }) => {
 
   const deletePost = (postId) => {
     // Delete the post on the backend
-    del(`/posts/${postId}`)
+    axiosDelete(`/posts/${postId}`)
       .then(() => {
         // Remove the post from the local state
         setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
