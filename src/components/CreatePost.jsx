@@ -1,13 +1,15 @@
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import PostContext from "../context/post.context";
 
 function CreatePost({ openModal, setOpenModal }) {
   const [reqBody, setReqBody] = useState({
-    media: {
-      type: "image", // Set default values for type and url
-      url: "",
-    },
+    media: [
+      {
+        type: "image",
+        url: "",
+      },
+    ],
     location: "",
     caption: "",
   });
@@ -17,10 +19,12 @@ function CreatePost({ openModal, setOpenModal }) {
   function onCloseModal() {
     setOpenModal(false);
     setReqBody({
-      media: {
-        type: "image",
-        url: "",
-      },
+      media: [
+        {
+          type: "image",
+          url: "",
+        },
+      ],
       location: "",
       caption: "",
     });
@@ -29,10 +33,12 @@ function CreatePost({ openModal, setOpenModal }) {
   const handleMediaChange = (key, value) => {
     setReqBody((prevReqBody) => ({
       ...prevReqBody,
-      media: {
-        ...prevReqBody.media,
-        [key]: value,
-      },
+      media: [
+        {
+          ...prevReqBody.media[0],
+          [key]: value,
+        },
+      ],
     }));
   };
 
@@ -50,13 +56,16 @@ function CreatePost({ openModal, setOpenModal }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    addPost(reqBody);
-    onCloseModal();
+    try {
+      const createdPost = await addPost(reqBody);
+      onCloseModal();
+    } catch (err) {
+      console.error("Error creating post:", err);
+      throw err;
+    }
   };
-
-  console.log(reqBody);
 
   return (
     <>

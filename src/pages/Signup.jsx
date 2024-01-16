@@ -17,26 +17,7 @@ const Signup = () => {
   });
 
   const navigate = useNavigate();
-
   const { storeToken, authenticateUser } = useContext(AuthContext);
-
-  // const handleFileInput = (e) => {
-  //   const file = e.target.files[0];
-
-  //   if (file) {
-  //     const maxSizeInBytes = 2048 * 2048; // 2 MB
-  //     if (file.size > maxSizeInBytes) {
-  //       console.error("File size exceeds the limit.");
-  //       return;
-  //     }
-  //     const reader = new FileReader();
-
-  //     reader.onloadend = () => {
-  //       setNewUser((prev) => ({ ...prev, profileImage: reader.result }));
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
 
   const handleTextInput = (e) => {
     setNewUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -81,7 +62,7 @@ const Signup = () => {
                 <div className="mt-5">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
-                    for="First Name"
+                    htmlFor="First Name"
                   >
                     First Name:
                     <input
@@ -97,7 +78,7 @@ const Signup = () => {
                 <div className="mt-5">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
-                    for="Last Name"
+                    htmlFor="Last Name"
                   >
                     Last Name:
                     <input
@@ -113,7 +94,7 @@ const Signup = () => {
                 <div className="mt-5">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
-                    for="Last Name"
+                    htmlFor="Last Name"
                   >
                     Username:
                     <input
@@ -129,7 +110,7 @@ const Signup = () => {
                 <div className="mt-5">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
-                    for="Email"
+                    htmlFor="Email"
                   >
                     Email:
                     <input
@@ -145,7 +126,7 @@ const Signup = () => {
                 <div className="mt-5">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
-                    for="Password"
+                    htmlFor="Password"
                   >
                     Password:
                     <input
@@ -161,7 +142,7 @@ const Signup = () => {
                 <div className="mt-5 flex justify-center gap-x-10">
                   <div>
                     <button
-                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                       onClick={() => navigate("/login")}
                     >
                       Back
@@ -170,7 +151,7 @@ const Signup = () => {
 
                   <div>
                     <button
-                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                       type="submit"
                     >
                       Signup

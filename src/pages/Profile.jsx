@@ -1,9 +1,14 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "../context/auth.context";
+import { useContext, useEffect, useState } from "react";
+import FollowersModal from "../components/FollowersModal";
+import FollowingModal from "../components/FollowingModal";
 import { EditPost } from "../components/EditPost";
-import { Button, Label, Modal, TextInput } from "flowbite-react";
+import { AuthContext } from "../context/auth.context";
+import { get } from "../services/authService";
 
 const Profile = () => {
+  const [userProfile, setUserProfile] = useState(null);
+  const [openFollowersModal, setOpenFollowersModal] = useState(false);
+  const [openFollowingModal, setOpenFollowingModal] = useState(false);
   const { user } = useContext(AuthContext);
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -27,57 +32,82 @@ const Profile = () => {
     }
   };
 
+  useEffect(() => {
+    user &&
+      get(`/users/${user._id}`)
+        .then((foundUser) => setUserProfile(foundUser.data))
+        .catch((err) => console.error("Error fetching user:", err));
+  }, []);
+
+  if (!userProfile) return <div>Loading...</div>;
+
+  const {
+    bannerImage,
+    profileImage,
+    firstName,
+    lastName,
+    followers,
+    following,
+    username,
+    posts,
+  } = userProfile;
+
   return (
     <div className="user-profile flex flex-col items-center justify-center">
-      {user && (
+      {userProfile && (
         <div className="w-full h-96">
-          <div className="user-banner relative h-64">
-            <img
-              className="w-full h-full object-cover"
-              src={user.bannerImage}
-              alt="banner image"
-            />
-            <div
-              className="user-image absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-              alt="profile image"
-            >
-              <img
-                className="w-20 h-20 rounded-full border-4 border-white"
-                src={user.profileImage}
-                alt="profile image"
-              />
+          <div className="relative h-64">
+            <img className="w-full h-full object-cover" src={bannerImage} alt="banner image" />
+            <div className="user-image absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <img className="w-20 h-20 rounded-full border-4 border-white" src={profileImage} alt="profile image" />
             </div>
           </div>
 
           <div className="user-info bg-gray-500 mt-4 p-4 rounded-lg">
             <div className="user-name flex gap-20">
-              {`${user.firstName} ${user.lastName}`}
-              <div>{user.posts.length} Posts</div>
-              <div>{user.followers.length} Followers</div>
-              <div>{user.following.length} Following</div>
+              {`${firstName} ${lastName}`}
+              <div className="flex flex-col items-center">
+                {posts.length} <span>Posts</span>
+              </div>
+              <div
+                className="flex flex-col items-center"
+                onClick={() => setOpenFollowersModal(true)}
+              >
+                {followers.length} <span>Followers</span>
+              </div>
+              <div
+                className="flex flex-col items-center"
+                onClick={() => setOpenFollowingModal(true)}
+              >
+                {following.length} <span>Following</span>
+              </div>
             </div>
-            <div className="user-handle">@{user.username}</div>
-            <div className="user-bio mt-5">
-              Hi, my name is {user.firstName}!
-            </div>
+            <div className="user-handle">@{username}</div>
+            <div className="user-bio mt-5">Hi, my name is {firstName}!</div>
           </div>
-
-          <div className="flex flex-row items-center justify-center gap-10">
-            {user.posts.map((post) => (
+          <div className="flex items-center justify-center gap-10">
+            {posts.map((post) => (
               <div key={post._id}>
                 <div
                   className="post-image-container p-8"
                   onClick={() => handleOpenModal(post)}
                 >
-                  <img
-                    className="post image w-80 h-80 p-8 shadow-2xl"
-                    src={post.media[0].url}
-                  />
+                  <img className="post image w-80 h-80 p-8 shadow-2xl" src={post.media[0].url} alt="post images" />
                   <span className="">{post.location}</span>
                 </div>
               </div>
             ))}
           </div>
+          <FollowersModal
+            openModal={openFollowersModal}
+            setOpenModal={setOpenFollowersModal}
+            followers={followers}
+          />
+          <FollowingModal
+            openModal={openFollowingModal}
+            setOpenModal={setOpenFollowingModal}
+            following={following}
+           />
           <EditPost
             openModal={openModal}
             setOpenModal={setOpenModal}
