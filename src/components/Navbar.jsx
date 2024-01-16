@@ -25,12 +25,13 @@ const Navbar = ({ setOpenModal }) => {
             <img className="w-6 h-6 " src="../src/assets/explore-icon.png" />
             Explore
           </Link>
-          <div className="flex flex-col items-center">
+          <button
+            onClick={() => setOpenModal(true)}
+            className="flex flex-col items-center"
+          >
             <img className="w-6 h-6" src="../src/assets/create-icon.png" />
-            <Button class="outline-none" onClick={() => setOpenModal(true)}>
-              Create Post
-            </Button>
-          </div>
+            Create Post
+          </button>
 
           <Link
             to="/profile"
