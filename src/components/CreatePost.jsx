@@ -18,7 +18,7 @@ function CreatePost({ openModal, setOpenModal }) {
     setOpenModal(false);
     setReqBody({
       media: {
-        type: "",
+        type: "image",
         url: "",
       },
       location: "",
@@ -76,22 +76,7 @@ function CreatePost({ openModal, setOpenModal }) {
 
             <div>
               <div className="Media mb-2 block">
-                <Label htmlFor="mediaType" value="Media Type" />
-                <select
-                  id="mediaType"
-                  onChange={(event) =>
-                    handleMediaChange("type", event.target.value)
-                  }
-                  value={reqBody.media.type}
-                  required
-                >
-                  {/* Add your media type options here */}
-                  <option value="image">Image</option>
-                  <option value="video">Video</option>
-                </select>
-              </div>
-              <div className="Media mb-2 block">
-                <Label htmlFor="mediaUrl" value="Media URL" />
+                <Label htmlFor="mediaUrl" value="Image URL" />
                 <TextInput
                   id="mediaUrl"
                   onChange={(event) =>
