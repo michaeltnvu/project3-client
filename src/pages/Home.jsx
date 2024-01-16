@@ -10,7 +10,7 @@ const Home = () => {
 
   return (
     <div>
-      <div className="home-posts flex flex-row items-center justify-center gap-10">
+      <div className="home-posts flex flex-wrap items-center justify-center gap-10">
         {posts &&
           posts.map((post) => {
             return (
@@ -19,6 +19,7 @@ const Home = () => {
                 key={post._id}
                 src={post.media[0].url}
               />
+              <span className="">{post.location}</span>
             );
           })}
       </div>
