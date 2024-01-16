@@ -67,7 +67,7 @@ const Profile = () => {
       <div className="flex flex-row gap-20 h-400">
         {posts.map((post) => {
           return (
-            <img key={post._id} src={post.media[0].url} alt="post images" />
+            <img className="w-80 h-80 p-8 shadow-2xl" key={post._id} src={post.media[0].url} alt="post images" />
           );
         })}
       </div>
