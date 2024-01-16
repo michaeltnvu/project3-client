@@ -12,10 +12,15 @@ export const PostProvider = ({ children }) => {
       .catch((error) => console.error("Error fetching posts:", error));
   };
 
-  const addPost = (newPost) => {
-    post(`/posts`, newPost)
-      .then((response) => setPosts([newPost, ...posts]))
-      .catch((error) => console.error("Error adding post:", error));
+  const addPost = async (newPost) => {
+    try {
+      const response = await post("/posts", newPost);
+      const createdPost = response.data;
+      return createdPost;
+    } catch (err) {
+      console.error("Error adding post:", err);
+      throw err;
+    }
   };
 
   return (

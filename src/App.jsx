@@ -6,6 +6,7 @@ import { AuthContext } from "./context/auth.context";
 import Explore from "./pages/Explore";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import OthersProfile from "./pages/OthersProfile";
 import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 
@@ -41,6 +42,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/users/:userId" element={<OthersProfile />} />
         </Route>
       </Routes>
     </>

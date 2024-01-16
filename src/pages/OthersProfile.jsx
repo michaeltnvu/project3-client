@@ -1,21 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import FollowersModal from "../components/FollowersModal";
 import FollowingModal from "../components/FollowingModal";
-import { AuthContext } from "../context/auth.context";
 import { get } from "../services/authService";
 
-const Profile = () => {
+const OthersProfile = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [openFollowersModal, setOpenFollowersModal] = useState(false);
   const [openFollowingModal, setOpenFollowingModal] = useState(false);
-  const { user } = useContext(AuthContext);
+
+  const { userId } = useParams();
 
   useEffect(() => {
-    user &&
-      get(`/users/${user._id}`)
-        .then((foundUser) => setUserProfile(foundUser.data))
-        .catch((err) => console.error("Error fetching user:", err));
-  }, []);
+    get(`/users/${userId}`)
+      .then((foundUser) => setUserProfile(foundUser.data))
+      .catch((err) => console.error("Error fetching user:", err));
+  }, [userId]);
 
   if (!userProfile) return <div>Loading...</div>;
 
@@ -28,6 +28,7 @@ const Profile = () => {
     following,
     username,
     posts,
+    bio,
   } = userProfile;
 
   return (
@@ -60,7 +61,7 @@ const Profile = () => {
               </div>
             </div>
             <div className="user-handle">@{username}</div>
-            <div className="user-bio mt-5">Hi, my name is {firstName}!</div>
+            <div className="user-bio mt-5">{bio}</div>
           </div>
 
           <div className="flex flex-row gap-4 w-[25vw]">
@@ -84,4 +85,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default OthersProfile;
