@@ -1,35 +1,27 @@
 import { Button, Label, Modal, TextInput } from "flowbite-react";
-import { useContext, useState, useEffect } from "react";
-import PostContext from "../context/post.context";
-import { get, post } from "../services/authService";
+import { useEffect, useState } from "react";
+import { get } from "../services/authService";
 
-function PostDetails({ openModal, setOpenModal, selectedPost }) {
-  const [postDetails, setPostDetails] = useState(null);
-  const [newComment, setNewComment] = useState({
-    comment: "",
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    post(`/posts/${selectedPost._id}/comments`, newComment)
-      .then(() =>
-        get(`/posts/${selectedPost._id}`).then((res) =>
-          setPostDetails(res.data)
-        ).catch((err) => console.log("Could not fetch post details", err))
-      )
-      .catch((err) => console.error("Error submitting post", err));
-  };
-
-  const { media, comments, likes, captions } = selectedPost;
+function PostDetails({
+  openModal,
+  setCloseModal,
+  selectedPost,
+  handleCommentSubmit,
+  newComment,
+  setNewComment,
+  handleDeleteComment,
+}) {
+  const [post, setPost] = useState(null);
+  const { media, likes, caption, location } = selectedPost;
+  
+  useEffect(() => {
+    if (openModal)
+      get(`/posts/${selectedPost._id}`).then((res) => setPost(res.data));
+  }, [newComment, handleCommentSubmit, handleDeleteComment]);
 
   return (
     <>
-      <Modal
-        show={openModal}
-        onClose={() => setOpenModal(false)}
-        dismissible
-        popup
-      >
+      <Modal show={openModal} onClose={setCloseModal} dismissible popup>
         <Modal.Header>View Post</Modal.Header>
         <Modal.Body>
           <div>
@@ -38,27 +30,49 @@ function PostDetails({ openModal, setOpenModal, selectedPost }) {
                 <div>
                   <div>
                     {media && (
-                      <img className="max-w-96 h-auto" src={media[0].url} />
+                      <>
+                        <img className="max-w-96 h-auto" src={media[0].url} />
+                        <div>
+                          <span>{location}</span>
+                          <span>{caption}</span>
+                        </div>
+                      </>
                     )}
                   </div>
+                  <div>{likes && likes.length} Likes</div>
                   <div className="">
                     <h3>Comments</h3>
                     <ul>
-                      {comments &&
-                        comments.map((comment, index) => (
-                          <li key={index} className="mb-1">
-                            {comment}
+                      {post &&
+                        post.comments.map((el, index) => (
+                          <li key={index} className="flex mb-1">
+                            <img
+                              className="w-4 h-4 mt-2 ml-2 rounded-full"
+                              src={el.createdByUser.profileImage}
+                            />
+                            <div className="flex ml-2">
+                              <div>
+                                <span>{el.createdByUser.username}</span>
+                                <p>{el.comment}</p>
+                              </div>
+                              <button
+                                onClick={() => handleDeleteComment(el._id)}
+                              >
+                                x
+                              </button>
+                            </div>
                           </li>
                         ))}
                     </ul>
-                    <form
-                      className=""
-                      onSubmit={handleSubmit}
-                    >
-                      <Label htmlFor="newComment"/>
+                    <form className="" onSubmit={handleCommentSubmit}>
+                      <Label htmlFor="newComment" />
                       <TextInput
                         id="newComment"
-                        onChange={(e) => setNewComment({comment: e.target.value})}
+                        onChange={(e) =>
+                          setNewComment({ comment: e.target.value })
+                        }
+                        value={newComment.comment}
+                        placeholder="Add a comment"
                       />
                       <Button className="text-black" type="submit">
                         Submit

@@ -5,11 +5,11 @@ import FollowingModal from "../components/FollowingModal";
 import PostDetailsModal from "../components/PostDetailsModal";
 import { AuthContext } from "../context/auth.context";
 import PostContext from "../context/post.context";
-import { get } from "../services/authService";
+import { get, post } from "../services/authService";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
-  const { posts: postsContext, deletePost } = useContext(PostContext);
+  const { posts: postsContext, deleteComment, deletePost } = useContext(PostContext);
   const [userProfile, setUserProfile] = useState(null);
   const [openFollowersModal, setOpenFollowersModal] = useState(false);
   const [openFollowingModal, setOpenFollowingModal] = useState(false);
@@ -26,10 +26,19 @@ const Profile = () => {
     caption: "",
   });
 
+  const [newComment, setNewComment] = useState({
+    comment: "",
+  });
+  
   const handleDelete = (postId) => {
-
     deletePost(postId);
     setOpenModal(false);
+  }
+
+  const handleOpenPostDetailsModal = (postId) => {
+    const foundPost = userProfile.posts.find((post) => post._id === postId);
+    setSelectedPost(foundPost);
+    setOpenPostDetailsModal(true);
   };
 
   const handleOpenModal = (postId) => {
@@ -38,13 +47,52 @@ const Profile = () => {
     setOpenModal(true);
   };
 
-const handleDeletePost = (postId) => {
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    post(`/posts/${selectedPost._id}/comments`, newComment)
+      .then(() => {
+        const updatedComments = [
+          ...selectedPost.comments,
+          {
+            createdByUser: {
+              profileImage: user.profileImage,
+              username: user.username,
+            },
+            comment: newComment.comment,
+          },
+        ];
+        setNewComment({ comment: "" });
+        setSelectedPost((prev) => ({
+          ...prev,
+          comments: updatedComments,
+        }));
+      })
+      .catch((err) => console.error("Error submitting post", err));
+  };
+
+  const handleDeleteComment = (commentId) => {
+    deleteComment(commentId);
+    const updatedComments = selectedPost.comments.filter(
+      (comment) => comment._id !== commentId
+    );
+    setSelectedPost((prev) => ({
+      ...prev,
+      comments: updatedComments,
+    }));
+  };
+
+  const handleClosePostDetailsModal = () => {
+    setOpenPostDetailsModal(false);
+    setSelectedPost({});
+    setNewComment({ comment: "" });
+  };
+  
+  const handleDeletePost = (postId) => {
   const foundPost = userProfile.posts.find((post) => post._id === postId);
     setEditingPost(foundPost);
     setDeletePost
   ; 
 }
-
 
   useEffect(() => {
     user &&
@@ -183,8 +231,12 @@ const handleDeletePost = (postId) => {
       />
       <PostDetailsModal
         openModal={openPostDetailsModal}
-        setOpenModal={setOpenPostDetailsModal}
+        setCloseModal={handleClosePostDetailsModal}
         selectedPost={selectedPost}
+        handleCommentSubmit={handleCommentSubmit}
+        newComment={newComment}
+        setNewComment={setNewComment}
+        handleDeleteComment={handleDeleteComment}
       />
     </div>
   );
