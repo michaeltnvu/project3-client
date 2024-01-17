@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import EditPostModal from "../components/EditPostModal";
 import FollowersModal from "../components/FollowersModal";
 import FollowingModal from "../components/FollowingModal";
+// import PostDetailsModal from "../components/PostDetailsModal";
+import { EditPost } from "../components/EditPost";
 import { AuthContext } from "../context/auth.context";
 import PostContext from "../context/post.context";
 import { get } from "../services/authService";
@@ -21,6 +23,16 @@ const Profile = () => {
     location: "",
     caption: "",
   });
+
+  const [hoveredPost, setHoveredPost] = useState(null);
+
+  const handleMouseEnter = (postId) => {
+    setHoveredPost(postId);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredPost(null);
+  };
 
   const handleOpenModal = (postId) => {
     const foundPost = userProfile.posts.find((post) => post._id === postId);
@@ -97,38 +109,59 @@ const Profile = () => {
           <div className="flex justify-center flex-wrap gap-10">
             {posts.map((post) => (
               <div
-                className="flex flex-col p-4 shadow-2xl"
                 key={post._id}
-                onClick={() => handleOpenModal(post._id)}
+                className="post-container relative"
+                onMouseEnter={() => handleMouseEnter(post._id)}
+                onMouseLeave={handleMouseLeave}
               >
-                <img
-                  className="w-80 h-80"
-                  src={post.media[0].url}
-                  alt="post images"
-                />
-                <span>{post.location}</span>
-                <span className="text-center mt-3 mb-1">"{post.caption}"</span>
+                <div className="post-image-container p-8">
+                  <img
+                    className="post image w-80 h-80 p-8 shadow-2xl"
+                    src={post.media[0].url}
+                    alt="post images"
+                  />
+                  <span className="">{post.location}</span>
+                  <span>Likes: {post.likes.length}</span>
+                  {hoveredPost === post._id && (
+                    <button
+                      className="hover-button px-4 py-2 rounded-md absolute top-0 right-0 mt-2 mr-2"
+                      onClick={() => handleOpenModal(true)}
+                    >
+                      <img
+                        src="../src/assets/pen.png"
+                        alt="Button Image"
+                        className="w-10 h-10 mr-2"
+                      />
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
+          <FollowersModal
+            openModal={openFollowersModal}
+            setOpenModal={setOpenFollowersModal}
+            followers={followers}
+          />
+          <FollowingModal
+            openModal={openFollowingModal}
+            setOpenModal={setOpenFollowingModal}
+            following={following}
+          />
+          <EditPost
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            editedPost={editedPost}
+            setEditedPost={setEditedPost}
+            postId={setSelectedPostId}
+          />
+          {/* <PostDetailsModal
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            selectedPost={posts.find((post) => post._id === selectedPostId)}
+          /> */}
         </div>
       )}
-      <FollowersModal
-        openModal={openFollowersModal}
-        setOpenModal={setOpenFollowersModal}
-        followers={followers}
-      />
-      <FollowingModal
-        openModal={openFollowingModal}
-        setOpenModal={setOpenFollowingModal}
-        following={following}
-      />
-      <EditPostModal
-        openModal={openModal}
-        setOpenModal={setOpenModal}
-        editingPost={editingPost}
-        setEditingPost={setEditingPost}
-      />
     </div>
   );
 };
