@@ -20,8 +20,6 @@ function PostDetails({ openModal, setOpenModal, selectedPost }) {
       .catch((err) => console.error("Error submitting post", err));
   };
 
-  console.log("postDetails", postDetails);
-
   const { media, comments, likes, captions } = selectedPost;
 
   return (
