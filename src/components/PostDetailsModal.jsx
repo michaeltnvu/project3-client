@@ -13,7 +13,7 @@ function PostDetails({
 }) {
   const [post, setPost] = useState(null);
   const { media, likes, caption, location } = selectedPost;
-
+  
   useEffect(() => {
     if (openModal)
       get(`/posts/${selectedPost._id}`).then((res) => setPost(res.data));

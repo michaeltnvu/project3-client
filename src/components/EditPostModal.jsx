@@ -77,12 +77,6 @@ const EditPostModal = ({
             >
               Update
             </Button>
-            <Button
-              className="bg-red-500 w-20 mb-8"
-              onClick={() => handleDelete(editingPost._id)}
-            >
-              Delete
-            </Button>
           </div>
         </div>
       </Modal.Body>

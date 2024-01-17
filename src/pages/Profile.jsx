@@ -9,7 +9,7 @@ import { get, post } from "../services/authService";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
-  const { posts: postsContext, deleteComment } = useContext(PostContext);
+  const { posts: postsContext, deleteComment, deletePost } = useContext(PostContext);
   const [userProfile, setUserProfile] = useState(null);
   const [openFollowersModal, setOpenFollowersModal] = useState(false);
   const [openFollowingModal, setOpenFollowingModal] = useState(false);
@@ -29,6 +29,11 @@ const Profile = () => {
   const [newComment, setNewComment] = useState({
     comment: "",
   });
+  
+  const handleDelete = (postId) => {
+    deletePost(postId);
+    setOpenModal(false);
+  }
 
   const handleOpenPostDetailsModal = (postId) => {
     const foundPost = userProfile.posts.find((post) => post._id === postId);
@@ -81,6 +86,13 @@ const Profile = () => {
     setSelectedPost({});
     setNewComment({ comment: "" });
   };
+  
+  const handleDeletePost = (postId) => {
+  const foundPost = userProfile.posts.find((post) => post._id === postId);
+    setEditingPost(foundPost);
+    setDeletePost
+  ; 
+}
 
   useEffect(() => {
     user &&
@@ -169,11 +181,23 @@ const Profile = () => {
                   </div>
                   {hoveredPost === post._id && (
                     <button
-                      className="hover-button px-4 py-2 rounded-md absolute top-0 right-0 mt-2 mr-2"
+                      className="hover-button px-4 py-2 rounded-md absolute top-0 right-10 mt-2 mr-2 drop-shadow-lg"
                       onClick={() => handleOpenModal(post._id)}
                     >
                       <img
-                        src="../src/assets/pen.png"
+                        src="../src/assets/pen-icon.png"
+                        alt="Button Image"
+                        className="w-10 h-10 mr-2"
+                      />
+                    </button>
+                  )}
+                  {hoveredPost === post._id && (
+                    <button
+                      className="Delete Button hover-button px-2 py-2 rounded-md absolute top-0 right-0 mt-2 mr-2 drop-shadow-lg"
+                      onClick={() => handleDelete(post._id)}
+                    >
+                      <img
+                        src="../src/assets/trash-icon.png"
                         alt="Button Image"
                         className="w-10 h-10 mr-2"
                       />
@@ -203,6 +227,7 @@ const Profile = () => {
         setOpenModal={setOpenModal}
         editingPost={editingPost}
         setEditingPost={setEditingPost}
+        deletePost={deletePost}
       />
       <PostDetailsModal
         openModal={openPostDetailsModal}
