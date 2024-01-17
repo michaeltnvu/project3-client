@@ -27,7 +27,6 @@ export const EditPost = ({
     }
   }, [postId, posts, setEditedPost]);
 
-
   //Form field functions
   const handleMediaChange = (key, value) => {
     setEditedPost((prevPost) => ({
@@ -77,7 +76,7 @@ export const EditPost = ({
         <Modal.Body>
           <div className="space-y-6">
             {/* Display existing post details */}
-            
+
             <div>
               <div className="Media mb-2 block">
                 <Label htmlFor="mediaUrl" value="Media URL" />

@@ -7,7 +7,7 @@
   padding: 0;
 }
 
-/* NAVBAR STYLING  ----> */
+/* NAVBAR STYLING  ----> 
 /*.navbar {
   top: 0;
   height: 60px;
@@ -16,7 +16,7 @@
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 2px 2px rgba(9, 9, 9, 0.23);
-}*/
+}
 
 .navbar-container {
   display: flex;
@@ -27,19 +27,19 @@
   color: white;
 }
 
-/* HOMEPAGE STYLING ---> */
+ HOMEPAGE STYLING ---> 
 .HomePage {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* PROFILE STYLING ---> */
+ PROFILE STYLING ---> 
 .userProfile {
   text-align: center;
 }
 
-/* SIGUNP STYLING --> */
+ SIGUNP STYLING --> 
 .signup-page {
   display: flex;
   flex-direction: column;
@@ -51,7 +51,7 @@
   flex-direction: column;
 }
 
-/* LOGIN STYLING --> */
+ LOGIN STYLING --> 
 
 .login-page {
   display: flex;
@@ -62,4 +62,4 @@
 .login-form {
   display: flex;
   flex-direction: column;
-}
+} */
