@@ -45,9 +45,22 @@ export const PostProvider = ({ children }) => {
       .catch((error) => console.error("Error deleting post:", error));
   };
 
+  const deleteComment = (commentId) => {
+    axiosDelete(`/comments/${commentId}`).catch((error) =>
+      console.log("Error deleting comment:", error)
+    );
+  };
+
   return (
     <PostContext.Provider
-      value={{ posts, fetchPosts, addPost, updatePost, deletePost }}
+      value={{
+        posts,
+        fetchPosts,
+        addPost,
+        updatePost,
+        deletePost,
+        deleteComment,
+      }}
     >
       {children}
     </PostContext.Provider>
