@@ -3,18 +3,18 @@ import EditPostModal from "../components/EditPostModal";
 import FollowersModal from "../components/FollowersModal";
 import FollowingModal from "../components/FollowingModal";
 // import PostDetailsModal from "../components/PostDetailsModal";
-import { EditPost } from "../components/EditPost";
 import { AuthContext } from "../context/auth.context";
 import PostContext from "../context/post.context";
 import { get } from "../services/authService";
 
 const Profile = () => {
+  const { user } = useContext(AuthContext);
+  const { posts: postsContext } = useContext(PostContext);
   const [userProfile, setUserProfile] = useState(null);
   const [openFollowersModal, setOpenFollowersModal] = useState(false);
   const [openFollowingModal, setOpenFollowingModal] = useState(false);
-  const { user } = useContext(AuthContext);
-  const { posts: postsContext } = useContext(PostContext);
   const [openModal, setOpenModal] = useState(false);
+  const [hoveredPost, setHoveredPost] = useState(null);
   const [editingPost, setEditingPost] = useState({
     media: {
       type: "image",
@@ -23,16 +23,6 @@ const Profile = () => {
     location: "",
     caption: "",
   });
-
-  const [hoveredPost, setHoveredPost] = useState(null);
-
-  const handleMouseEnter = (postId) => {
-    setHoveredPost(postId);
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredPost(null);
-  };
 
   const handleOpenModal = (postId) => {
     const foundPost = userProfile.posts.find((post) => post._id === postId);
@@ -111,21 +101,23 @@ const Profile = () => {
               <div
                 key={post._id}
                 className="post-container relative"
-                onMouseEnter={() => handleMouseEnter(post._id)}
-                onMouseLeave={handleMouseLeave}
+                onMouseEnter={() => setHoveredPost(post._id)}
+                onMouseLeave={() => setHoveredPost(null)}
               >
-                <div className="post-image-container p-8">
+                <div className="flex flex-col p-4 shadow-2xl" key={post._id}>
                   <img
-                    className="post image w-80 h-80 p-8 shadow-2xl"
+                    className="w-80 h-80"
                     src={post.media[0].url}
                     alt="post images"
                   />
-                  <span className="">{post.location}</span>
-                  <span>Likes: {post.likes.length}</span>
+                  <div className="flex justify-between">
+                    <span>{post.location}</span>
+                    <span>Likes: {post.likes.length}</span>
+                  </div>
                   {hoveredPost === post._id && (
                     <button
                       className="hover-button px-4 py-2 rounded-md absolute top-0 right-0 mt-2 mr-2"
-                      onClick={() => handleOpenModal(true)}
+                      onClick={() => handleOpenModal(post._id)}
                     >
                       <img
                         src="../src/assets/pen.png"
@@ -134,34 +126,36 @@ const Profile = () => {
                       />
                     </button>
                   )}
+                  <span className="text-center mt-3 mb-1">
+                    "{post.caption}"
+                  </span>
                 </div>
               </div>
             ))}
           </div>
-          <FollowersModal
-            openModal={openFollowersModal}
-            setOpenModal={setOpenFollowersModal}
-            followers={followers}
-          />
-          <FollowingModal
-            openModal={openFollowingModal}
-            setOpenModal={setOpenFollowingModal}
-            following={following}
-          />
-          <EditPost
-            openModal={openModal}
-            setOpenModal={setOpenModal}
-            editedPost={editedPost}
-            setEditedPost={setEditedPost}
-            postId={setSelectedPostId}
-          />
-          {/* <PostDetailsModal
+        </div>
+      )}
+      <FollowersModal
+        openModal={openFollowersModal}
+        setOpenModal={setOpenFollowersModal}
+        followers={followers}
+      />
+      <FollowingModal
+        openModal={openFollowingModal}
+        setOpenModal={setOpenFollowingModal}
+        following={following}
+      />
+      <EditPostModal
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        editingPost={editingPost}
+        setEditingPost={setEditingPost}
+      />
+      {/* <PostDetailsModal
             openModal={openModal}
             setOpenModal={setOpenModal}
             selectedPost={posts.find((post) => post._id === selectedPostId)}
           /> */}
-        </div>
-      )}
     </div>
   );
 };

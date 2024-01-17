@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import TestModal from "../components/TestModal.jsx";
 import PostContext from "../context/post.context.jsx";
 
 const Home = () => {
@@ -30,7 +29,6 @@ const Home = () => {
             </div>
           ))}
       </div>
-      <TestModal />
     </div>
   );
 };
