@@ -9,7 +9,11 @@ import { get, post } from "../services/authService";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
-  const { posts: postsContext, deleteComment, deletePost } = useContext(PostContext);
+  const {
+    posts: postsContext,
+    deleteComment,
+    deletePost,
+  } = useContext(PostContext);
   const [userProfile, setUserProfile] = useState(null);
   const [openFollowersModal, setOpenFollowersModal] = useState(false);
   const [openFollowingModal, setOpenFollowingModal] = useState(false);
@@ -29,11 +33,11 @@ const Profile = () => {
   const [newComment, setNewComment] = useState({
     comment: "",
   });
-  
+
   const handleDelete = (postId) => {
     deletePost(postId);
     setOpenModal(false);
-  }
+  };
 
   const handleOpenPostDetailsModal = (postId) => {
     const foundPost = userProfile.posts.find((post) => post._id === postId);
@@ -86,13 +90,6 @@ const Profile = () => {
     setSelectedPost({});
     setNewComment({ comment: "" });
   };
-  
-  const handleDeletePost = (postId) => {
-  const foundPost = userProfile.posts.find((post) => post._id === postId);
-    setEditingPost(foundPost);
-    setDeletePost
-  ; 
-}
 
   useEffect(() => {
     user &&

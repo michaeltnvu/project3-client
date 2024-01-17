@@ -1,6 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: "Amarillo";
+  src: url("../public/fonts/Amarillo.ttf") format("truetype");
+  /* You may need to add other font formats (e.g., woff, woff2) for better browser compatibility */
+  font-weight: normal;
+  font-style: normal;
+}
 
 * {
   margin: 0;
