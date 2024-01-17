@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-import CreatePost from "./components/CreatePost";
+import CreatePostModal from "./components/CreatePostModal";
 import Navbar from "./components/Navbar";
 import { AuthContext } from "./context/auth.context";
 import Explore from "./pages/Explore";
@@ -18,7 +18,7 @@ function App() {
     return getToken() ? (
       <>
         <Navbar setOpenModal={setOpenModal} />
-        <CreatePost openModal={openModal} setOpenModal={setOpenModal} />
+        <CreatePostModal openModal={openModal} setOpenModal={setOpenModal} />
         <Outlet />
       </>
     ) : (

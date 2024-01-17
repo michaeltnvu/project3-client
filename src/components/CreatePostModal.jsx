@@ -1,18 +1,8 @@
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
-import {Flowbite} from 'flowbite-react'; 
 import { useContext, useState } from "react";
 import PostContext from "../context/post.context";
 
-function CreatePost({ openModal, setOpenModal }) {
-
-  const customTheme = {
-    button: {
-      color: {
-        primary: 'bg-red-500 hover:bg-red-600',
-      },
-    },
-  };
-
+const CreatePostModal = ({ openModal, setOpenModal }) => {
   const [reqBody, setReqBody] = useState({
     media: [
       {
@@ -69,7 +59,7 @@ function CreatePost({ openModal, setOpenModal }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const createdPost = await addPost(reqBody);
+      await addPost(reqBody);
       onCloseModal();
     } catch (err) {
       console.error("Error creating post:", err);
@@ -78,22 +68,13 @@ function CreatePost({ openModal, setOpenModal }) {
   };
 
   return (
-    <Flowbite theme={customTheme}>
-      <Modal
-        show={openModal}
-        onClose={onCloseModal}
-        dismissible
-        popup
-      >
-        <Modal.Header />
+    <>
+      <Modal dismissible popup show={openModal} onClose={onCloseModal}>
+        <Modal.Header>Create Post</Modal.Header>
         <Modal.Body>
           <div>
-            <h3 className="text-xl font-medium text-gray-900 dark:text-white">
-              Create Post
-            </h3>
-
             <div>
-              <div className="Media mb-2 block">
+              <div className="mb-2 block">
                 <Label htmlFor="mediaUrl" value="Image URL" />
                 <TextInput
                   id="mediaUrl"
@@ -105,21 +86,20 @@ function CreatePost({ openModal, setOpenModal }) {
                 />
               </div>
             </div>
-
             <div>
-              <div className="Country mb-2 block">
+              <div className="mb-2 block">
                 <Label htmlFor="location" value="Location" />
               </div>
               <TextInput
                 id="location"
                 onChange={handleLocationChange}
                 value={reqBody.location}
+                placeholder="City (optional), State (optional), Country"
                 required
               />
             </div>
-
             <div>
-              <div className="Caption mb-2 block">
+              <div className="mb-2 block">
                 <Label htmlFor="caption" value="Caption" />
               </div>
               <TextInput
@@ -129,17 +109,16 @@ function CreatePost({ openModal, setOpenModal }) {
                 required
               />
             </div>
-
             <div className="w-full">
-              <Button onClick={handleSubmit}>
+              <Button className="text-black" onClick={handleSubmit}>
                 Submit
               </Button>
             </div>
           </div>
         </Modal.Body>
       </Modal>
-    </Flowbite>
+    </>
   );
-}
+};
 
-export default CreatePost;
+export default CreatePostModal;
