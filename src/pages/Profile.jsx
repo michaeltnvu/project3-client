@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import EditPostModal from "../components/EditPostModal";
 import FollowersModal from "../components/FollowersModal";
 import FollowingModal from "../components/FollowingModal";
-// import PostDetailsModal from "../components/PostDetailsModal";
+import PostDetailsModal from "../components/PostDetailsModal";
 import { AuthContext } from "../context/auth.context";
 import PostContext from "../context/post.context";
 import { get } from "../services/authService";
@@ -13,8 +13,10 @@ const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [openFollowersModal, setOpenFollowersModal] = useState(false);
   const [openFollowingModal, setOpenFollowingModal] = useState(false);
+  const [openPostDetailsModal, setOpenPostDetailsModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [hoveredPost, setHoveredPost] = useState(null);
+  const [selectedPost, setSelectedPost] = useState({});
   const [editingPost, setEditingPost] = useState({
     media: {
       type: "image",
@@ -23,6 +25,12 @@ const Profile = () => {
     location: "",
     caption: "",
   });
+
+  const handleOpenPostDetailsModal = (postId) => {
+    const foundPost = userProfile.posts.find((post) => post._id === postId);
+    setSelectedPost(foundPost);
+    setOpenPostDetailsModal(true);
+  };
 
   const handleOpenModal = (postId) => {
     const foundPost = userProfile.posts.find((post) => post._id === postId);
@@ -109,6 +117,7 @@ const Profile = () => {
                     className="w-80 h-80"
                     src={post.media[0].url}
                     alt="post images"
+                    onClick={() => handleOpenPostDetailsModal(post._id)}
                   />
                   <div className="flex justify-between">
                     <span>{post.location}</span>
@@ -151,11 +160,11 @@ const Profile = () => {
         editingPost={editingPost}
         setEditingPost={setEditingPost}
       />
-      {/* <PostDetailsModal
-            openModal={openModal}
-            setOpenModal={setOpenModal}
-            selectedPost={posts.find((post) => post._id === selectedPostId)}
-          /> */}
+      <PostDetailsModal
+        openModal={openPostDetailsModal}
+        setOpenModal={setOpenPostDetailsModal}
+        selectedPost={selectedPost}
+      />
     </div>
   );
 };
