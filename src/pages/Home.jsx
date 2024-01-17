@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import TestModal from "../components/TestModal.jsx";
 import PostContext from "../context/post.context.jsx";
 
 const Home = () => {
@@ -10,19 +11,26 @@ const Home = () => {
 
   return (
     <div>
-      <div className="home-posts flex flex-wrap items-center justify-center gap-10">
+      <div className="flex flex-wrap justify-center gap-10">
         {posts &&
           posts.map((post) => (
-<div> 
-              <img
-                className="w-80 h-80 p-8 shadow-2xl"
-                key={post._id}
-                src={post.media[0].url}
-              />
-              <span className="">{post.location}</span>
+            <div
+              className="flex flex-col px-4 pt-4 pb-3 shadow-2xl"
+              key={post._id}
+            >
+              <img className="w-80 h-80" src={post.media[0].url} />
+              <span className="mb-2">{post.location}</span>
+              <div className="flex items-center">
+                <img
+                  className="w-6 h-6 mr-1 rounded-full"
+                  src={post.createdByUser.profileImage}
+                />
+                <span>{post.createdByUser.username}</span>
               </div>
-            ))}
+            </div>
+          ))}
       </div>
+      <TestModal />
     </div>
   );
 };

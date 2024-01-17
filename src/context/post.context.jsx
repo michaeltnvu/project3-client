@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { get, post, put, axiosDelete } from "../services/authService";
+import { axiosDelete, get, post, put } from "../services/authService";
 
 const PostContext = createContext();
 
@@ -23,30 +23,32 @@ export const PostProvider = ({ children }) => {
     }
   };
 
-  const updatePost = (postId, updatedPost) => {
-    // Update the post on the backend
-    put(`/posts/${postId}`, updatedPost)
+  const updatePost = (postId, reqBody) => {
+    put(`/posts/${postId}`, reqBody)
       .then(() => {
-        // Update the post in the local state
         setPosts((prevPosts) =>
-          prevPosts.map((post) => (post.id === postId ? updatedPost : post))
+          prevPosts.map((post) =>
+            post._id === postId ? { ...post, ...reqBody } : post
+          )
         );
       })
       .catch((error) => console.error("Error updating post:", error));
   };
 
   const deletePost = (postId) => {
-    // Delete the post on the backend
     axiosDelete(`/posts/${postId}`)
       .then(() => {
-        // Remove the post from the local state
-        setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+        setPosts((prevPosts) =>
+          prevPosts.filter((post) => post._id !== postId)
+        );
       })
       .catch((error) => console.error("Error deleting post:", error));
   };
 
   return (
-    <PostContext.Provider value={{ posts, fetchPosts, addPost, updatePost, deletePost }}>
+    <PostContext.Provider
+      value={{ posts, fetchPosts, addPost, updatePost, deletePost }}
+    >
       {children}
     </PostContext.Provider>
   );

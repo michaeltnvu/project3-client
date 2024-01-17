@@ -35,10 +35,18 @@ const OthersProfile = () => {
     <div className="user-profile flex flex-col items-center justify-center">
       {userProfile && (
         <div>
-          <div className="user-banner ">
-            <img src={bannerImage} alt="banner image" />
-            <div className="">
-              <img src={profileImage} alt="profile image" />
+          <div className="relative h-64">
+            <img
+              className="w-full h-full object-cover"
+              src={bannerImage}
+              alt="banner image"
+            />
+            <div className="user-image absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <img
+                className="w-40 h-40 rounded-full border-4 border-white"
+                src={profileImage}
+                alt="profile image"
+              />
             </div>
           </div>
           <div className="user-info bg-gray-500">
