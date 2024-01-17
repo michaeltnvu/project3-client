@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import FollowersModal from "../components/FollowersModal";
 import FollowingModal from "../components/FollowingModal";
+// import PostDetailsModal from "../components/PostDetailsModal";
 import { EditPost } from "../components/EditPost";
 import { AuthContext } from "../context/auth.context";
 import { get } from "../services/authService";
@@ -20,6 +21,17 @@ const Profile = () => {
     location: "",
     caption: "",
   });
+
+  const [hoveredPost, setHoveredPost] = useState(null);
+
+  const handleMouseEnter = (postId) => {
+    setHoveredPost(postId);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredPost(null);
+  };
+
 
   const handleOpenModal = (postId) => {
     setSelectedPostId(postId);
@@ -87,17 +99,31 @@ const Profile = () => {
           </div>
           <div className="flex items-center justify-center gap-10">
             {posts.map((post) => (
-              <div key={post._id}>
+              <div
+                key={post._id}
+                className="post-container relative"
+                onMouseEnter={() => handleMouseEnter(post._id)}
+                onMouseLeave={handleMouseLeave}
+              >
                 <div
                   className="post-image-container p-8"
-                  onClick={() => handleOpenModal(post)}
                 >
-                  <img className="post image w-80 h-80 p-8 shadow-2xl" src={post.media[0].url} alt="post images" />
+                  <img
+                    className="post image w-80 h-80 p-8 shadow-2xl"
+                    src={post.media[0].url}
+                    alt="post images"
+                  />
                   <span className="">{post.location}</span>
+                  <span>Likes: {post.likes.length}</span>
+                  {hoveredPost === post._id && (
+                    <button className="hover-button px-4 py-2 rounded-md absolute top-0 right-0 mt-2 mr-2" onClick={() => handleOpenModal(true)}>
+                      <img src="../src/assets/pen.png" alt="Button Image" className="w-10 h-10 mr-2" />
+                    </button>
+                  )}
                 </div>
-              </div>
+                </div>
             ))}
-          </div>
+            </div>
           <FollowersModal
             openModal={openFollowersModal}
             setOpenModal={setOpenFollowersModal}
@@ -115,6 +141,11 @@ const Profile = () => {
             setEditedPost={setEditedPost}
             postId={setSelectedPostId}
           />
+            {/* <PostDetailsModal
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            selectedPost={posts.find((post) => post._id === selectedPostId)}
+          /> */}
         </div>
       )}
     </div>

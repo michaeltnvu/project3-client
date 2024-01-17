@@ -1,8 +1,18 @@
 import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
+import {Flowbite} from 'flowbite-react'; 
 import { useContext, useState } from "react";
 import PostContext from "../context/post.context";
 
 function CreatePost({ openModal, setOpenModal }) {
+
+  const customTheme = {
+    button: {
+      color: {
+        primary: 'bg-red-500 hover:bg-red-600',
+      },
+    },
+  };
+
   const [reqBody, setReqBody] = useState({
     media: [
       {
@@ -68,10 +78,9 @@ function CreatePost({ openModal, setOpenModal }) {
   };
 
   return (
-    <>
+    <Flowbite theme={customTheme}>
       <Modal
         show={openModal}
-        size="md"
         onClose={onCloseModal}
         dismissible
         popup
@@ -122,14 +131,14 @@ function CreatePost({ openModal, setOpenModal }) {
             </div>
 
             <div className="w-full">
-              <Button className="text-black" onClick={handleSubmit}>
+              <Button onClick={handleSubmit}>
                 Submit
               </Button>
             </div>
           </div>
         </Modal.Body>
       </Modal>
-    </>
+    </Flowbite>
   );
 }
 
