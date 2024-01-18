@@ -41,7 +41,7 @@ function PostDetails({
                   </div>
                   <div>{likes && likes.length} Likes</div>
                   <div className="">
-                    <h3>Comments</h3>
+                    <h3 className="bg-slate-600 rounded-md text-white outline-4">Comments</h3>
                     <ul>
                       {post &&
                         post.comments.map((el, index) => (
@@ -74,9 +74,11 @@ function PostDetails({
                         value={newComment.comment}
                         placeholder="Add a comment"
                       />
-                      <Button className="text-black" type="submit">
+                      <div className="w-full space-x-4 flex justify-center gap-10 mt-1">
+                      <Button className="bg-sky-500 w-20 mb-8" type="submit">
                         Submit
                       </Button>
+                      </div>
                     </form>
                   </div>
                 </div>

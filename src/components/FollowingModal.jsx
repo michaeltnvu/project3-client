@@ -15,8 +15,8 @@ const FollowingModal = ({ openModal, setOpenModal, following }) => {
         dismissible
         popup
       >
+        <Modal.Body className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md p-8 w-96 max-h-full shadow-2xl">
         <Modal.Header>Following</Modal.Header>
-        <Modal.Body>
           <div>
             {following.length === 0 ? (
               <span>You are not following anyone at the moment</span>

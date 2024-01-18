@@ -33,7 +33,10 @@ const Login = () => {
   return (
     <div
       className="h-screen w-screen flex items-center justify-center"
-      style={{ background: "url(../src/assets/signup-background.png)" }}
+      style={{ backgroundImage: "url(../src/assets/signup-background.png)",
+    backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",
+ }}
     >
       <div className="container py-20 flex items-center justify-center mx-auto">
         <div className="flex w-8/12 bg-white rounded-xl shadow-xl overflow-hidden">
