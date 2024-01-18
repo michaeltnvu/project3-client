@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import LoadingSvg from "../assets/loading.svg";
 import EditPostModal from "../components/EditPostModal";
 import FollowersModal from "../components/FollowersModal";
 import FollowingModal from "../components/FollowingModal";
@@ -100,7 +101,14 @@ const Profile = () => {
         .catch((err) => console.error("Error fetching user:", err));
   }, [postsContext]);
 
-  if (!userProfile) return <div>Loading...</div>;
+  if (!userProfile)
+    return (
+      <img
+        className="h-screen w-screen flex items-center justify-center"
+        src={LoadingSvg}
+        alt="loading"
+      />
+    );
 
   const {
     bannerImage,

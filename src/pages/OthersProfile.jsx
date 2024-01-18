@@ -1,23 +1,51 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import LoadingSvg from "../assets/loading.svg";
 import FollowersModal from "../components/FollowersModal";
 import FollowingModal from "../components/FollowingModal";
-import { get } from "../services/authService";
+import { UserContext } from "../context/user.context";
 
 const OthersProfile = () => {
-  const [userProfile, setUserProfile] = useState(null);
   const [openFollowersModal, setOpenFollowersModal] = useState(false);
   const [openFollowingModal, setOpenFollowingModal] = useState(false);
-
+  const [followingUser, setFollowingUser] = useState(null);
+  const [followStatus, setFollowingStatus] = useState(null);
+  const {
+    fetchLoggedInUser,
+    fetchUser,
+    loggedInUser,
+    selectedUser,
+    unfollowUser,
+  } = useContext(UserContext);
   const { userId } = useParams();
 
-  useEffect(() => {
-    get(`/users/${userId}`)
-      .then((foundUser) => setUserProfile(foundUser.data))
-      .catch((err) => console.error("Error fetching user:", err));
-  }, [userId]);
+  const fetchData = async () => {
+    try {
+      await fetchLoggedInUser();
+      await fetchUser(userId);
+      await setFollowingUser(
+        selectedUser.followers.some((user) => user._id === loggedInUser._id)
+      );
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-  if (!userProfile) return <div>Loading...</div>;
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [followStatus]);
+
+  console.log("followStatus", followStatus);
+
+  const handleFollow = () => {
+    unfollowUser();
+  };
+
+  if (!selectedUser) return <img src={LoadingSvg} />;
 
   const {
     bannerImage,
@@ -29,11 +57,11 @@ const OthersProfile = () => {
     username,
     posts,
     bio,
-  } = userProfile;
+  } = selectedUser;
 
   return (
     <div className="user-profile flex flex-col items-center justify-center">
-      {userProfile && (
+      {selectedUser && (
         <div>
           <div className="relative h-64">
             <img
@@ -49,27 +77,42 @@ const OthersProfile = () => {
               />
             </div>
           </div>
-          <div className="user-info bg-gray-500">
-            <div className="user-name flex gap-20">
-              {`${firstName} ${lastName}`}
-              <div className="flex flex-col items-center">
-                {posts.length} <span>Posts</span>
+          <div className="bg-gray-500">
+            <div className="flex gap-20">
+              <div className="flex flex-col">
+                <span>
+                  {firstName} {lastName}
+                </span>
+                <span>@{username}</span>
               </div>
-              <div
-                className="flex flex-col items-center"
-                onClick={() => setOpenFollowersModal(true)}
-              >
-                {followers.length} <span>Followers</span>
-              </div>
-              <div
-                className="flex flex-col items-center"
-                onClick={() => setOpenFollowingModal(true)}
-              >
-                {following.length} <span>Following</span>
+              <div>
+                <div className="flex justify-between w-64 mb-2">
+                  <div className="flex flex-col items-center">
+                    {posts.length} <span>Posts</span>
+                  </div>
+                  <div
+                    className="flex flex-col items-center"
+                    onClick={() => setOpenFollowersModal(true)}
+                  >
+                    {followers.length} <span>Followers</span>
+                  </div>
+                  <div
+                    className="flex flex-col items-center"
+                    onClick={() => setOpenFollowingModal(true)}
+                  >
+                    {following.length} <span>Following</span>
+                  </div>
+                </div>
+                <button
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+                  onClick={handleFollow}
+                >
+                  {followingUser ? "Unfollow" : "Follow"}
+                </button>
               </div>
             </div>
-            <div className="user-handle">@{username}</div>
-            <div className="user-bio mt-5">{bio}</div>
+
+            <div className="mt-5">{bio}</div>
           </div>
 
           <div className="flex flex-row gap-4 w-[25vw]">
