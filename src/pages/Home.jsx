@@ -11,15 +11,25 @@ const Home = () => {
   const sortedPosts = [...posts].sort(
     (a, b) => b.likes.length - a.likes.length
   );
+  // Function to shuffle an array
+  const shuffleArray = (array) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
 
   const trendingPosts = sortedPosts.slice(0, 4);
-  const otherPosts = posts.slice(5).filter((post) => post.likes.length === 0);
+  const otherPosts = shuffleArray(sortedPosts.slice(4));
 
   return (
     <div>
-      <div className="flex flex-col items-center my-8">
-        <h3 className="text-3xl mb-4 font-amarillo tracking-wider">
-          Trending Posts
+      <div className="flex flex-col items-center">
+        <div className="my-8">
+        <h3 className="text-3xl mb-4 font-amarillo flex flex-wrap justify-center tracking-wider mt-6">
+          Featured Posts
         </h3>
         <div className="flex flex-wrap justify-center gap-10">
           {trendingPosts.map((post) => (
@@ -45,11 +55,12 @@ const Home = () => {
             </div>
           ))}
         </div>
-        <div className="flex flex-col items-center my-8">
-          <h3 className="text-3xl mb-4 font-amarillo tracking-wider">
+        </div>
+        <div className="flex flex-col items-center mt-6">
+          <h3 className="text-3xl font-amarillo tracking-wider">
             Posts from other Pathfindrs
           </h3>
-          <div className="flex flex-wrap justify-center gap-10">
+          <div className="flex flex-wrap justify-center gap-10 my-8">
             {posts &&
               otherPosts.map((post) => (
                 <div

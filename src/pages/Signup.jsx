@@ -39,7 +39,7 @@ const Signup = () => {
 
   return (
     <div
-      className="min-h-screen py-20"
+      className="h-screen w-screen flex items-center justify-center"
       style={{ background: "url(../src/assets/signup-background.png)" }}
     >
       <div className="container py-20 flex items-center justify-center mx-auto">
