@@ -22,8 +22,8 @@ function PostDetails({
   return (
     <>
       <Modal show={openModal} onClose={setCloseModal} dismissible popup>
+        <Modal.Body className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md p-8 w-96 max-h-full shadow-2xl">
         <Modal.Header>View Post</Modal.Header>
-        <Modal.Body>
           <div>
             <div className="">
               {selectedPost && (
@@ -31,8 +31,8 @@ function PostDetails({
                   <div>
                     {media && (
                       <>
-                        <img className="max-w-96 h-auto" src={media[0].url} />
-                        <div>
+                        <img className="max-w-80 h-auto" src={media[0].url} />
+                        <div className="flex gap-20">
                           <span>{location}</span>
                           <span>{caption}</span>
                         </div>
