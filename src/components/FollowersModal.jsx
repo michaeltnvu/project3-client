@@ -15,8 +15,8 @@ const FollowersModal = ({ openModal, setOpenModal, followers }) => {
         dismissible
         popup
       >
+        <Modal.Body className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md p-8 w-96 max-h-full shadow-2xl">
         <Modal.Header>Followers</Modal.Header>
-        <Modal.Body>
           <div className="">
             {followers.length === 0 ? (
               <span>No followers available</span>

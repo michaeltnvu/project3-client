@@ -34,10 +34,10 @@ const Home = () => {
         <div className="flex flex-wrap justify-center gap-10">
           {trendingPosts.map((post) => (
             <div
-              className="flex flex-col px-4 pt-4 pb-3 shadow-2xl"
+              className="flex flex-col px-4 pt-4 pb-3 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300"
               key={post._id}
             >
-              <img className="w-80 h-80" src={post.media[0].url} />
+              <img className="w-80 h-80 " src={post.media[0].url} />
               <div className="flex justify-between">
                 <span className="mb-2">{post.location}</span>
                 <div className="flex gap-1">
@@ -64,7 +64,7 @@ const Home = () => {
             {posts &&
               otherPosts.map((post) => (
                 <div
-                  className="flex flex-col px-4 pt-4 pb-3 shadow-2xl"
+                  className="flex flex-col px-4 pt-4 pb-3 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300"
                   key={post._id}
                 >
                   <img className="w-80 h-80" src={post.media[0].url} />

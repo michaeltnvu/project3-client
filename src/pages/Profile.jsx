@@ -7,7 +7,7 @@ import PostDetailsModal from "../components/PostDetailsModal";
 import { AuthContext } from "../context/auth.context";
 import PostContext from "../context/post.context";
 import { get, post } from "../services/authService";
-import ProfilePictureModal from "../components/ProfilePictureModal"; 
+import ProfilePictureModal from "../components/ProfilePictureModal";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
@@ -23,7 +23,7 @@ const Profile = () => {
   const [openModal, setOpenModal] = useState(false);
   const [hoveredPost, setHoveredPost] = useState(null);
   const [selectedPost, setSelectedPost] = useState({});
-  const [editPicture, setEditPicture] = useState(false); 
+  const [editPicture, setEditPicture] = useState(false);
   const [editingPost, setEditingPost] = useState({
     media: {
       type: "image",
@@ -137,7 +137,12 @@ const Profile = () => {
                 src={profileImage}
                 alt="profile image"
               />
-              <button className="" onClick={() => setEditPicture(true)}>Edit Picture</button>
+              <button className="" onClick={() => setEditPicture(true)}>
+                <img
+                  src="../src/assets/pen-icon.png"
+                  className="w-10 h-10 rounded-md absolute top-0 right-0 mt-2 mr-2 drop-shadow-lg"
+                />
+              </button>
             </div>
           </div>
 
@@ -184,9 +189,12 @@ const Profile = () => {
                 onMouseEnter={() => setHoveredPost(post._id)}
                 onMouseLeave={() => setHoveredPost(null)}
               >
-                <div className="flex flex-col p-4 shadow-2xl" key={post._id}>
+                <div
+                  className="flex flex-col p-4 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300"
+                  key={post._id}
+                >
                   <img
-                    className="w-80 h-80 transition-transform transform hover:scale-105"
+                    className="w-80 h-80 transition-transform transform hover:scale-105 "
                     src={post.media[0].url}
                     alt="post images"
                   />
@@ -225,7 +233,7 @@ const Profile = () => {
                         />
                       </button>
                       <button
-                        className="Post-Details-Button bg-gray-500 text-white px-4 py-2 rounded-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        className="Post-Details-Button bg-gray-500 opacity-75 text-white px-4 py-2 rounded-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                         onClick={() => handleOpenPostDetailsModal(post._id)}
                       >
                         <img
@@ -272,8 +280,8 @@ const Profile = () => {
         handleDeleteComment={handleDeleteComment}
       />
       <ProfilePictureModal
-      editPicture={editPicture}
-setEditPicture={setEditPicture}
+        editPicture={editPicture}
+        setEditPicture={setEditPicture}
       />
     </div>
   );
