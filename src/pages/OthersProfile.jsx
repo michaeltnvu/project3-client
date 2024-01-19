@@ -60,7 +60,7 @@ const OthersProfile = () => {
   } = selectedUser;
 
   return (
-    <div className="user-profile flex flex-col items-center justify-center">
+    <div>
       {selectedUser && (
         <div>
           <div className="relative h-64">
@@ -69,7 +69,7 @@ const OthersProfile = () => {
               src={bannerImage}
               alt="banner image"
             />
-            <div className="user-image absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="user-image absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 drop-shadow-xl">
               <img
                 className="w-40 h-40 rounded-full border-4 border-white"
                 src={profileImage}
@@ -77,49 +77,65 @@ const OthersProfile = () => {
               />
             </div>
           </div>
-          <div className="bg-gray-500">
-            <div className="flex gap-20">
-              <div className="flex flex-col">
-                <span>
+          <div className="user-info bg-slate-300 mt-4 p-4 rounded-lg drop-shadow-xl">
+            <div className="text-center font-bold">
+              <div className="text-2xl">
                   {firstName} {lastName}
-                </span>
-                <span>@{username}</span>
               </div>
+              <div className="user-handle">@{username}</div>
               <div>
-                <div className="flex justify-between w-64 mb-2">
-                  <div className="flex flex-col items-center">
-                    {posts.length} <span>Posts</span>
+              <div className="flex justify-center space-x-60 mt-2 font-bold">
+              <div className="flex flex-col items-center cursor-pointer">
+                    {posts.length}
+                 <span className="bg-slate-600 rounded-md text-white outline-4 px-4">Posts</span>
                   </div>
                   <div
                     className="flex flex-col items-center"
                     onClick={() => setOpenFollowersModal(true)}
                   >
-                    {followers.length} <span>Followers</span>
+                    {followers.length} <span className="bg-slate-600 rounded-md text-white outline-4 px-4">Followers</span>
                   </div>
                   <div
                     className="flex flex-col items-center"
                     onClick={() => setOpenFollowingModal(true)}
                   >
-                    {following.length} <span>Following</span>
+                    {following.length} <span className="bg-slate-600 rounded-md text-white outline-4 px-4">Following</span>
                   </div>
                 </div>
+                <div>
                 <button
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-1 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20"
                   onClick={handleFollow}
                 >
                   {followingUser ? "Unfollow" : "Follow"}
                 </button>
+                </div>
               </div>
             </div>
 
             <div className="mt-5">{bio}</div>
           </div>
 
-          <div className="flex flex-row gap-4 w-[25vw]">
+          <div className="flex justify-center flex-wrap gap-10 mt-10">
             {posts.map((post) => (
-              <img key={post._id} src={post.media[0].url} alt="post images" />
+              <div className="flex flex-col p-4 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300"> 
+              <img className="w-80 h-80 transition-transform transform hover:scale-105 " key={post._id} src={post.media[0].url} alt="post images" />
+              <div className="flex justify-between mt-2"> </div>
+              <div className="flex gap-1">
+                <span>{post.location}</span>
+                <img
+                  className="w-5 h-5 ml-40"
+                  src="../src/assets/heart.png"
+                />
+                <span>{post.likes.length}</span>
+                
+                <div classname="flex flex-col">
+                
+                   </div>
+              </div>
+              </div>
             ))}
-          </div>
+            </div>
           <FollowersModal
             openModal={openFollowersModal}
             setOpenModal={setOpenFollowersModal}
