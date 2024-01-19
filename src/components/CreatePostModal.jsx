@@ -1,6 +1,15 @@
-import { Button, Checkbox, Label, Modal, TextInput } from "flowbite-react";
+import {
+  Button,
+  Checkbox,
+  FileInput,
+  Label,
+  Modal,
+  TextInput,
+} from "flowbite-react";
 import { useContext, useState } from "react";
 import PostContext from "../context/post.context";
+
+import { fileChange } from "../services/fileChange";
 
 const CreatePostModal = ({ openModal, setOpenModal }) => {
   const [reqBody, setReqBody] = useState({
@@ -13,6 +22,8 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
     location: "",
     caption: "",
   });
+
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const { addPost } = useContext(PostContext);
 
@@ -56,6 +67,29 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
     }));
   };
 
+  const handleFileChange = (e, key) => {
+    setButtonDisabled(true);
+
+    fileChange(e)
+      .then((response) => {
+        console.log("Cloudinary response", response.data);
+        setReqBody((prevReqBody) => ({
+          ...prevReqBody,
+          media: [
+            {
+              ...prevReqBody.media[0],
+              [key]: response.data.image,
+            },
+          ],
+        }));
+        setButtonDisabled(false);
+      })
+      .catch((err) => {
+        setButtonDisabled(false);
+        console.log("Error while uploading the file: ", err);
+      });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -76,11 +110,9 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="mediaUrl" value="Image URL" />
-                <TextInput
+                <FileInput
                   id="mediaUrl"
-                  onChange={(event) =>
-                    handleMediaChange("url", event.target.value)
-                  }
+                  onChange={(e) => handleFileChange(e, "url")}
                   value={reqBody.media.url}
                   required
                 />
@@ -110,7 +142,11 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
               />
             </div>
             <div className="w-full">
-              <Button className="text-black" onClick={handleSubmit}>
+              <Button
+                disabled={false}
+                className="text-black"
+                onClick={handleSubmit}
+              >
                 Submit
               </Button>
             </div>

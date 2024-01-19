@@ -4,26 +4,27 @@ import EditPostModal from "../components/EditPostModal";
 import FollowersModal from "../components/FollowersModal";
 import FollowingModal from "../components/FollowingModal";
 import PostDetailsModal from "../components/PostDetailsModal";
-import { AuthContext } from "../context/auth.context";
+import ProfilePictureModal from "../components/ProfilePictureModal";
 import PostContext from "../context/post.context";
-import { get, post } from "../services/authService";
-import ProfilePictureModal from "../components/ProfilePictureModal"; 
+import { UserContext } from "../context/user.context";
+import { post } from "../services/authService";
 
 const Profile = () => {
-  const { user } = useContext(AuthContext);
   const {
     posts: postsContext,
     deleteComment,
     deletePost,
   } = useContext(PostContext);
-  const [userProfile, setUserProfile] = useState(null);
+  const { fetchLoggedInUser, loggedInUser, selectedUser } =
+    useContext(UserContext);
+
   const [openFollowersModal, setOpenFollowersModal] = useState(false);
   const [openFollowingModal, setOpenFollowingModal] = useState(false);
   const [openPostDetailsModal, setOpenPostDetailsModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [hoveredPost, setHoveredPost] = useState(null);
   const [selectedPost, setSelectedPost] = useState({});
-  const [editPicture, setEditPicture] = useState(false); 
+  const [editPicture, setEditPicture] = useState(false);
   const [editingPost, setEditingPost] = useState({
     media: {
       type: "image",
@@ -43,13 +44,13 @@ const Profile = () => {
   };
 
   const handleOpenPostDetailsModal = (postId) => {
-    const foundPost = userProfile.posts.find((post) => post._id === postId);
+    const foundPost = loggedInUser.posts.find((post) => post._id === postId);
     setSelectedPost(foundPost);
     setOpenPostDetailsModal(true);
   };
 
   const handleOpenModal = (postId) => {
-    const foundPost = userProfile.posts.find((post) => post._id === postId);
+    const foundPost = loggedInUser.posts.find((post) => post._id === postId);
     setEditingPost(foundPost);
     setOpenModal(true);
   };
@@ -95,13 +96,14 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    user &&
-      get(`/users/${user._id}`)
-        .then((foundUser) => setUserProfile(foundUser.data))
-        .catch((err) => console.error("Error fetching user:", err));
-  }, [postsContext]);
+    fetchLoggedInUser();
+  }, []);
 
-  if (!userProfile)
+  useEffect(() => {
+    fetchLoggedInUser();
+  }, [postsContext, selectedUser]);
+
+  if (!loggedInUser)
     return (
       <img
         className="h-screen w-screen flex items-center justify-center"
@@ -119,11 +121,13 @@ const Profile = () => {
     following,
     username,
     posts,
-  } = userProfile;
+  } = loggedInUser;
+
+  console.log("loggedInUser", loggedInUser);
 
   return (
     <div>
-      {userProfile && (
+      {loggedInUser && (
         <div>
           <div className="relative h-64">
             <img
@@ -131,17 +135,19 @@ const Profile = () => {
               src={bannerImage}
               alt="banner image"
             />
-            <div className="user-image absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 drop-shadow-xl">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 drop-shadow-xl">
               <img
                 className="w-40 h-40 rounded-full border-4 border-white"
                 src={profileImage}
                 alt="profile image"
               />
-              <button className="" onClick={() => setEditPicture(true)}>Edit Picture</button>
+              <button className="" onClick={() => setEditPicture(true)}>
+                Edit Picture
+              </button>
             </div>
           </div>
 
-          <div className="user-info bg-slate-300 mt-4 p-4 rounded-lg drop-shadow-xl">
+          <div className="bg-slate-300 mt-4 p-4 rounded-lg drop-shadow-xl">
             <div className="text-center font-bold">
               <div className="text-2xl">
                 {firstName} {lastName}
@@ -177,71 +183,79 @@ const Profile = () => {
             </div>
           </div>
           <div className="flex justify-center flex-wrap gap-10 mt-10">
-            {posts.map((post) => (
-              <div
-                key={post._id}
-                className="post-container relative"
-                onMouseEnter={() => setHoveredPost(post._id)}
-                onMouseLeave={() => setHoveredPost(null)}
-              >
-                <div className="flex flex-col p-4 shadow-2xl" key={post._id}>
-                  <img
-                    className="w-80 h-80 transition-transform transform hover:scale-105"
-                    src={post.media[0].url}
-                    alt="post images"
-                  />
-                  <div className="flex justify-between mt-2"> </div>
-                  <div className="flex gap-1">
-                    <span>{post.location}</span>
+            {posts ? (
+              posts.map((post) => (
+                <div
+                  key={post._id}
+                  className="post-container relative"
+                  onMouseEnter={() => setHoveredPost(post._id)}
+                  onMouseLeave={() => setHoveredPost(null)}
+                >
+                  <div
+                    className="flex flex-col p-4 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300"
+                    key={post._id}
+                  >
                     <img
-                      className="w-5 h-5 ml-40"
-                      src="../src/assets/heart.png"
+                      className="w-80 h-80 transition-transform transform hover:scale-105 "
+                      src={post.media && post.media[0] && post.media[0].url}
+                      alt="post images"
                     />
-                    <span>{post.likes.length}</span>
-                  </div>
+                    <div className="flex justify-between mt-2">
+                      <span>{post.location}</span>
+                      <div className="flex">
+                        <img
+                          className="w-5 h-5 ml-40"
+                          src="../src/assets/heart.png"
+                        />
+                        <span>{post.likes && post.likes.length}</span>
+                      </div>
+                    </div>
 
-                  {hoveredPost === post._id && (
-                    <button
-                      className="hover-button px-4 py-2 rounded-md absolute top-0 right-10 mt-2 mr-2 drop-shadow-lg"
-                      onClick={() => handleOpenModal(post._id)}
-                    >
-                      <img
-                        src="../src/assets/pen-icon.png"
-                        alt="Button Image"
-                        className="w-10 h-10"
-                      />
-                    </button>
-                  )}
-                  {hoveredPost === post._id && (
-                    <>
+                    {hoveredPost === post._id && (
                       <button
-                        className="Delete Button hover-button px-2 py-2 rounded-md absolute top-0 right-0 mt-2 mr-2 drop-shadow-lg"
-                        onClick={() => handleDelete(post._id)}
+                        className="hover-button px-4 py-2 rounded-md absolute top-0 right-10 mt-2 mr-2 drop-shadow-lg"
+                        onClick={() => handleOpenModal(post._id)}
                       >
                         <img
-                          src="../src/assets/trash-icon.png"
+                          src="../src/assets/pen-icon.png"
                           alt="Button Image"
                           className="w-10 h-10"
                         />
                       </button>
-                      <button
-                        className="Post-Details-Button bg-gray-500 text-white px-4 py-2 rounded-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                        onClick={() => handleOpenPostDetailsModal(post._id)}
-                      >
-                        <img
-                          src="../src/assets/eye-icon.png"
-                          alt="Button Image"
-                          className="w-10 h-10"
-                        />
-                      </button>
-                    </>
-                  )}
-                  <span className="text-center mt-3 mb-1 font-amarillo">
-                    "{post.caption}"
-                  </span>
+                    )}
+                    {hoveredPost === post._id && (
+                      <>
+                        <button
+                          className="Delete Button hover-button px-2 py-2 rounded-md absolute top-0 right-0 mt-2 mr-2 drop-shadow-lg"
+                          onClick={() => handleDelete(post._id)}
+                        >
+                          <img
+                            src="../src/assets/trash-icon.png"
+                            alt="Button Image"
+                            className="w-10 h-10"
+                          />
+                        </button>
+                        <button
+                          className="Post-Details-Button bg-gray-500 opacity-75 text-white px-4 py-2 rounded-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                          onClick={() => handleOpenPostDetailsModal(post._id)}
+                        >
+                          <img
+                            src="../src/assets/eye-icon.png"
+                            alt="Button Image"
+                            className="w-10 h-10"
+                          />
+                        </button>
+                      </>
+                    )}
+                    <span className="text-center mt-3 mb-1 font-amarillo">
+                      "{post.caption}"
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <span key="no-posts">No posts available</span>
+            )}
           </div>
         </div>
       )}
@@ -272,8 +286,8 @@ const Profile = () => {
         handleDeleteComment={handleDeleteComment}
       />
       <ProfilePictureModal
-      editPicture={editPicture}
-setEditPicture={setEditPicture}
+        editPicture={editPicture}
+        setEditPicture={setEditPicture}
       />
     </div>
   );
