@@ -105,35 +105,43 @@ const OthersProfile = () => {
           <div className="user-info bg-slate-300 mt-4 p-4 rounded-lg drop-shadow-xl">
             <div className="text-center font-bold">
               <div className="text-2xl">
-                  {firstName} {lastName}
+                {firstName} {lastName}
               </div>
               <div className="user-handle">@{username}</div>
               <div>
-              <div className="flex justify-center space-x-60 mt-2 font-bold">
-              <div className="flex flex-col items-center cursor-pointer">
+                <div className="flex justify-center space-x-60 mt-2 font-bold">
+                  <div className="flex flex-col items-center cursor-pointer">
                     {posts.length}
-                 <span className="bg-slate-600 rounded-md text-white outline-4 px-4">Posts</span>
+                    <span className="bg-slate-600 rounded-md text-white outline-4 px-4">
+                      Posts
+                    </span>
                   </div>
                   <div
                     className="flex flex-col items-center"
                     onClick={() => setOpenFollowersModal(true)}
                   >
-                    {followers.length} <span className="bg-slate-600 rounded-md text-white outline-4 px-4">Followers</span>
+                    {followers.length}{" "}
+                    <span className="bg-slate-600 rounded-md text-white outline-4 px-4">
+                      Followers
+                    </span>
                   </div>
                   <div
                     className="flex flex-col items-center"
                     onClick={() => setOpenFollowingModal(true)}
                   >
-                    {following.length} <span className="bg-slate-600 rounded-md text-white outline-4 px-4">Following</span>
+                    {following.length}{" "}
+                    <span className="bg-slate-600 rounded-md text-white outline-4 px-4">
+                      Following
+                    </span>
                   </div>
                 </div>
                 <div>
-                <button
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-1 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20"
-                  onClick={handleFollow}
-                >
-                  {!loading && followingUser ? "Unfollow" : "Follow"}
-                </button>
+                  <button
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-1 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20"
+                    onClick={handleFollow}
+                  >
+                    {!loading && followingUser ? "Unfollow" : "Follow"}
+                  </button>
                 </div>
               </div>
             </div>
@@ -156,9 +164,9 @@ const OthersProfile = () => {
                       className="w-5 h-5 ml-40"
                       src="../src/assets/heart.png"
                     />
-                    <span>{post.likes.length}</span>
-                   </div>
+                    <span>{post.likes && post.likes.length}</span>
                   </div>
+                </div>
               ))
             ) : (
               <span key="no-posts">No posts available</span>
