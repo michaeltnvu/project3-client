@@ -10,22 +10,24 @@ const FollowersModal = ({ openModal, setOpenModal, followers }) => {
     <div>
       <Modal
         show={openModal}
-        size="md"
+        size="sm"
         onClose={() => setOpenModal(false)}
         dismissible
         popup
       >
-        <Modal.Body className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md p-8 w-96 max-h-full shadow-2xl">
-        <Modal.Header>Followers</Modal.Header>
-          <div className="">
+        <Modal.Header className="mb-3 text-lg font-black">
+          Followers
+        </Modal.Header>
+        <Modal.Body className="shadow-2xl">
+          <div>
             {followers.length === 0 ? (
               <span>No followers available</span>
             ) : (
               <div className="flex flex-col">
                 {followers.map((follower, index) => (
-                  <div key={index}>
+                  <div key={index} className="border-b-2">
                     <Link
-                      className="flex"
+                      className="flex my-1"
                       to={
                         user._id !== follower._id
                           ? `/users/${follower._id}`
@@ -33,7 +35,7 @@ const FollowersModal = ({ openModal, setOpenModal, followers }) => {
                       }
                     >
                       <img
-                        className="rounded-full w-6 h-6 ml-5 mb-2"
+                        className="rounded-full w-6 h-6 "
                         src={follower.profileImage}
                       />
                       <span className="ml-2">{follower.username}</span>

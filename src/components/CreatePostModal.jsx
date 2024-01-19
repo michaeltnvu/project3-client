@@ -1,17 +1,18 @@
 import {
   Button,
-  Checkbox,
   FileInput,
+  FloatingLabel,
   Label,
   Modal,
   TextInput,
 } from "flowbite-react";
 import { useContext, useState } from "react";
 import PostContext from "../context/post.context";
-
 import { fileChange } from "../services/fileChange";
 
 const CreatePostModal = ({ openModal, setOpenModal }) => {
+  const { addPost } = useContext(PostContext);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [reqBody, setReqBody] = useState({
     media: [
       {
@@ -22,10 +23,6 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
     location: "",
     caption: "",
   });
-
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-
-  const { addPost } = useContext(PostContext);
 
   function onCloseModal() {
     setOpenModal(false);
@@ -40,18 +37,6 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
       caption: "",
     });
   }
-
-  const handleMediaChange = (key, value) => {
-    setReqBody((prevReqBody) => ({
-      ...prevReqBody,
-      media: [
-        {
-          ...prevReqBody.media[0],
-          [key]: value,
-        },
-      ],
-    }));
-  };
 
   const handleLocationChange = (event) => {
     setReqBody((prevReqBody) => ({
@@ -69,7 +54,6 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
 
   const handleFileChange = (e, key) => {
     setButtonDisabled(true);
-
     fileChange(e)
       .then((response) => {
         console.log("Cloudinary response", response.data);
@@ -85,13 +69,12 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
         setButtonDisabled(false);
       })
       .catch((err) => {
-        setButtonDisabled(false);
+        setButtonDisabled(true);
         console.log("Error while uploading the file: ", err);
       });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
       await addPost(reqBody);
       onCloseModal();
@@ -104,36 +87,36 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
   return (
     <>
       <Modal dismissible popup show={openModal} onClose={onCloseModal}>
-        <Modal.Body className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md p-8 w-96 max-h-full shadow-2xl">
-        <Modal.Header>Create Post</Modal.Header>
+        <Modal.Header className="mb-3 text-lg font-black">
+          Create Post
+        </Modal.Header>
+        <Modal.Body className="shadow-2xl">
           <div>
             <div>
-              <div className="mb-2 block">
-                <Label htmlFor="mediaUrl" value="Image URL" />
+              <div className="block">
+                <Label htmlFor="mediaUrl" value="Upload file" />
                 <FileInput
                   id="mediaUrl"
+                  sizing="sm"
+                  helperText="SVG, PNG, JPG, JPEG, or GIF"
                   onChange={(e) => handleFileChange(e, "url")}
                   value={reqBody.media.url}
                   required
                 />
               </div>
             </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="location" value="Location" />
-              </div>
+            <div className="my-3">
+              <Label htmlFor="location" value="Location" />
               <TextInput
                 id="location"
                 onChange={handleLocationChange}
                 value={reqBody.location}
-                placeholder="City (optional), State (optional), Country"
+                placeholder="State (optional), Country"
                 required
               />
             </div>
             <div>
-              <div className="mb-2 block">
-                <Label htmlFor="caption" value="Caption" />
-              </div>
+              <Label htmlFor="caption" value="Caption" />
               <TextInput
                 id="caption"
                 onChange={handleCaptionChange}
@@ -141,10 +124,10 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
                 required
               />
             </div>
-            <div className="w-full">
+            <div className="flex justify-end">
               <Button
-                disabled={false}
-                className="text-black"
+                disabled={buttonDisabled}
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-1 mt-3 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20"
                 onClick={handleSubmit}
               >
                 Submit

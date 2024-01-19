@@ -7,12 +7,12 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [pictureChanged, setPictureChanged] = useState(false);
   const { user } = useContext(AuthContext);
 
   const fetchLoggedInUser = async () => {
     try {
       if (!user) {
-        console.log("Retrieving user");
         return;
       }
       await get(`/users/${user._id}`)
@@ -29,6 +29,13 @@ const UserProvider = ({ children }) => {
     get(`/users/${userId}`)
       .then((foundUser) => setSelectedUser(foundUser.data))
       .catch((error) => console.error("Error fetching selected user:", error));
+  };
+
+  const changeProfilePic = (selectedImage) => {
+    put(`/users/${loggedInUser._id}`, { profileImage: selectedImage })
+      .then((updatedUser) => setLoggedInUser(updatedUser.data))
+      .then(() => setPictureChanged((prev) => !prev))
+      .catch((err) => console.error("Error changing profile picture:", err));
   };
 
   const unfollowUser = async () => {
@@ -81,7 +88,6 @@ const UserProvider = ({ children }) => {
 
       await put(`/users/${selectedUser._id}`, { followers: addFollower })
         .then((updatedUser) => {
-          console.log("follow user context:", updatedUser.data);
           setSelectedUser(updatedUser.data);
         })
         .then(() => {
@@ -114,6 +120,8 @@ const UserProvider = ({ children }) => {
         selectedUser,
         unfollowUser,
         followUser,
+        changeProfilePic,
+        pictureChanged,
       }}
     >
       {children}

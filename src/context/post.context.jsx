@@ -5,11 +5,18 @@ const PostContext = createContext();
 
 export const PostProvider = ({ children }) => {
   const [posts, setPosts] = useState([]);
+  const [post, setPost] = useState([]);
 
   const fetchPosts = () => {
     get(`/posts`)
       .then((response) => setPosts(response.data))
       .catch((error) => console.error("Error fetching posts:", error));
+  };
+
+  const fetchPost = (postId) => {
+    get(`/posts/${postId}`)
+      .then((res) => setPost(res.data))
+      .catch((err) => console.error("Error fetching single post:", err));
   };
 
   const addPost = async (newPost) => {
@@ -60,6 +67,7 @@ export const PostProvider = ({ children }) => {
         updatePost,
         deletePost,
         deleteComment,
+        fetchPost,
       }}
     >
       {children}

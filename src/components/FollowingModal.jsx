@@ -10,22 +10,24 @@ const FollowingModal = ({ openModal, setOpenModal, following }) => {
     <div>
       <Modal
         show={openModal}
-        size="md"
+        size="sm"
         onClose={() => setOpenModal(false)}
         dismissible
         popup
       >
-        <Modal.Body className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md p-8 w-96 max-h-full shadow-2xl">
-        <Modal.Header>Following</Modal.Header>
+        <Modal.Header className="mb-3 text-lg font-black">
+          Following
+        </Modal.Header>
+        <Modal.Body className="shadow-2xl">
           <div>
             {following.length === 0 ? (
-              <span>You are not following anyone at the moment</span>
+              <span>You are not following anyone</span>
             ) : (
               <div className="flex flex-col">
                 {following.map((user, index) => (
-                  <div key={index} className="flex">
+                  <div key={index} className="border-b-2">
                     <Link
-                      className="flex"
+                      className="flex my-1"
                       to={
                         authUser._id !== user._id
                           ? `/users/${user._id}`
@@ -33,7 +35,7 @@ const FollowingModal = ({ openModal, setOpenModal, following }) => {
                       }
                     >
                       <img
-                        className="rounded-full w-6 h-6 ml-5 mb-2"
+                        className="rounded-full w-6 h-6"
                         src={user.profileImage}
                       />
                       <span className="ml-2">{user.username}</span>

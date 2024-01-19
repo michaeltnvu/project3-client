@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import heart from "../assets/heart.png";
 import PostContext from "../context/post.context.jsx";
 
 const Home = () => {
@@ -25,26 +26,31 @@ const Home = () => {
   const otherPosts = shuffleArray(sortedPosts.slice(4));
 
   return (
-    <div>
-      <div className="flex flex-col items-center">
-        <div className="my-8">
-        <h3 className="text-3xl mb-4 font-amarillo flex flex-wrap justify-center tracking-wider mt-6">
+    <div className="flex flex-col items-center">
+      <div className="my-10">
+        <h3 className="text-3xl mb-5 font-amarillo flex flex-wrap justify-center tracking-wider mt-6">
           Featured Posts
         </h3>
-        <div className="flex flex-wrap justify-center gap-10">
+        <div className="flex flex-wrap justify-center gap-5">
           {trendingPosts.map((post) => (
             <div
-              className="flex flex-col px-4 pt-4 pb-3 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300"
+              className="flex flex-col px-4 pt-4 pb-3 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300 transition-transform transform hover:scale-105"
               key={post._id}
             >
-              <img className="w-80 h-80 " src={post.media[0].url} />
+              <img className="w-80 h-80" src={post.media[0].url} />
               <div className="flex justify-between">
                 <span className="mb-2">{post.location}</span>
-                <div className="flex gap-1">
-                  <img className="w-5 h-5" src="../src/assets/heart.png" />
-                  <span>{post.likes.length}</span>
+                <div className="flex">
+                  {/* <img className="w-5 h-5" src={heart} /> */}
+                  <span>{post.likes.length} likes</span>
                 </div>
               </div>
+              <span
+                key={`14/${post._id}`}
+                className="text-center mt-3 mb-1 font-amarillo"
+              >
+                "{post.caption}"
+              </span>
               <div className="flex items-center">
                 <img
                   className="w-6 h-6 mr-1 rounded-full"
@@ -55,34 +61,41 @@ const Home = () => {
             </div>
           ))}
         </div>
-        </div>
-        <div className="flex flex-col items-center mt-6">
-          <h3 className="text-3xl font-amarillo tracking-wider">
-            Posts from other Pathfindrs
-          </h3>
-          <div className="flex flex-wrap justify-center gap-10 my-8">
-            {posts &&
-              otherPosts.map((post) => (
-                <div
-                  className="flex flex-col px-4 pt-4 pb-3 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300"
-                  key={post._id}
-                >
-                  <img className="w-80 h-80" src={post.media[0].url} />
+      </div>
+      <div className="flex flex-col items-center mt-6">
+        <h3 className="text-3xl font-amarillo tracking-wider">
+          Posts from other Pathfindrs
+        </h3>
+        <div className="flex flex-wrap justify-center gap-10 my-8">
+          {posts &&
+            otherPosts.map((post) => (
+              <div
+                className="flex flex-col px-4 pt-4 pb-3 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300 transition-transform transform hover:scale-105"
+                key={post._id}
+              >
+                <img className="w-80 h-80 " src={post.media[0].url} />
+                <div className="flex justify-between">
                   <span className="mb-2">{post.location}</span>
-                  <div className="flex items-center">
-                    <img
-                      className="w-6 h-6 mr-1 rounded-full"
-                      src={post.createdByUser.profileImage}
-                    />
-                    <span>{post.createdByUser.username}</span>
-                    <div className="flex gap-1">
-                      <img className="w-5 h-5" src="../src/assets/heart.png" />
-                      <span>{post.likes.length}</span>
-                    </div>
+                  <div className="flex">
+                    {/* <img className="w-5 h-5" src={heart} /> */}
+                    <span>{post.likes.length} likes</span>
                   </div>
                 </div>
-              ))}
-          </div>
+                <span
+                  key={`14/${post._id}`}
+                  className="text-center mt-3 mb-1 font-amarillo"
+                >
+                  "{post.caption}"
+                </span>
+                <div className="flex items-center">
+                  <img
+                    className="w-6 h-6 mr-1 rounded-full"
+                    src={post.createdByUser.profileImage}
+                  />
+                  <span>{post.createdByUser.username}</span>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     </div>
