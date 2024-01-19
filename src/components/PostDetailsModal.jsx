@@ -13,7 +13,7 @@ function PostDetails({
 }) {
   const [post, setPost] = useState(null);
   const { media, likes, caption, location } = selectedPost;
-  
+
   useEffect(() => {
     if (openModal)
       get(`/posts/${selectedPost._id}`).then((res) => setPost(res.data));
@@ -22,26 +22,27 @@ function PostDetails({
   return (
     <>
       <Modal show={openModal} onClose={setCloseModal} dismissible popup>
-        <Modal.Body className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md p-8 w-96 max-h-full shadow-2xl">
-        <Modal.Header>View Post</Modal.Header>
+        <Modal.Header className="mb-3 text-lg font-black">
+          Viewing Post
+        </Modal.Header>
+        <Modal.Body className="shadow-2xl">
           <div>
             <div className="">
               {selectedPost && (
-                <div>
+                <div className="flex flex-col items-center">
                   <div>
                     {media && (
-                      <>
-                        <img className="max-w-80 h-auto" src={media[0].url} />
-                        <div className="flex gap-20">
+                      <div>
+                        <img className="max-w-96" src={media[0].url} />
+                        <div className="flex justify-between">
                           <span>{location}</span>
-                          <span>{caption}</span>
+                          <span>{likes && likes.length} Likes</span>
                         </div>
-                      </>
+                        <span className="flex justify-center">{caption}</span>
+                      </div>
                     )}
                   </div>
-                  <div>{likes && likes.length} Likes</div>
-                  <div className="">
-                    <h3 className="bg-slate-600 rounded-md text-white outline-4">Comments</h3>
+                  <div>
                     <ul>
                       {post &&
                         post.comments.map((el, index) => (
@@ -50,35 +51,36 @@ function PostDetails({
                               className="w-4 h-4 mt-2 ml-2 rounded-full"
                               src={el.createdByUser.profileImage}
                             />
-                            <div className="flex ml-2">
-                              <div>
+                            <div className="w-full">
+                              <div className="flex justify-between ml-2">
                                 <span>{el.createdByUser.username}</span>
-                                <p>{el.comment}</p>
+                                <button
+                                  onClick={() => handleDeleteComment(el._id)}
+                                >
+                                  x
+                                </button>
                               </div>
-                              <button
-                                onClick={() => handleDeleteComment(el._id)}
-                              >
-                                x
-                              </button>
+                              <p>{el.comment}</p>
                             </div>
                           </li>
                         ))}
                     </ul>
-                    <form className="" onSubmit={handleCommentSubmit}>
-                      <Label htmlFor="newComment" />
+                    <form
+                      className="flex justify-center"
+                      onSubmit={handleCommentSubmit}
+                    >
                       <TextInput
                         id="newComment"
+                        className="w-[19em]"
                         onChange={(e) =>
                           setNewComment({ comment: e.target.value })
                         }
                         value={newComment.comment}
                         placeholder="Add a comment"
                       />
-                      <div className="w-full space-x-4 flex justify-center gap-10 mt-1">
-                      <Button className="bg-sky-500 w-20 mb-8" type="submit">
+                      <Button className="bg-sky-500 w-20" type="submit">
                         Submit
                       </Button>
-                      </div>
                     </form>
                   </div>
                 </div>

@@ -8,7 +8,7 @@ const EditPostModal = ({
   editingPost,
   setEditingPost,
 }) => {
-  const { updatePost, deletePost } = useContext(PostContext);
+  const { updatePost } = useContext(PostContext);
 
   const handleLocationChange = (event) => {
     setEditingPost((prevPost) => ({
@@ -29,38 +29,29 @@ const EditPostModal = ({
     setOpenModal(false);
   };
 
-  const handleDelete = (postId) => {
-    deletePost(postId);
-    setOpenModal(false);
-  };
-
   return (
     <Modal
       dismissible
       popup
+      size="sm"
       show={openModal}
-      position="center"
       onClose={() => setOpenModal(false)}
     >
-      <Modal.Body className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md p-8 w-96 max-h-full shadow-2xl">
-      <Modal.Header className="font-bold">Edit Post</Modal.Header>
-        <div className="space-y-6">
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="location" value="Location"  />
-            </div>
+      <Modal.Header className="mb-3 text-lg font-black">Edit Post</Modal.Header>
+      <Modal.Body className="shadow-2xl">
+        <div>
+          <div className="mb-2">
+            <Label htmlFor="location" value="Location" />
             <TextInput
               id="location"
               onChange={handleLocationChange}
               value={editingPost.location}
+              placeholder="State (optional), Country"
               required
             />
           </div>
-
           <div>
-            <div className="mb-2 block">
-              <Label htmlFor="caption" value="Caption" />
-            </div>
+            <Label htmlFor="caption" value="Caption" />
             <TextInput
               id="caption"
               onChange={handleCaptionChange}
@@ -68,13 +59,12 @@ const EditPostModal = ({
               required
             />
           </div>
-
-          <div className="w-full space-x-4 flex justify-center gap-10">
+          <div className="flex justify-end">
             <Button
-              className="bg-sky-500 w-20 mb-8"
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-1 mt-3 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20"
               onClick={() => handleEditSubmit(editingPost._id)}
             >
-              Update
+              Submit
             </Button>
           </div>
         </div>

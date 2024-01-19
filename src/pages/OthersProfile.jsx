@@ -23,13 +23,8 @@ const OthersProfile = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      await fetchLoggedInUser();
-      await fetchUser(userId);
-      // setFollowingUser(
-      //   selectedUser &&
-      //     loggedInUser &&
-      //     selectedUser.followers.some((user) => user._id === loggedInUser._id)
-      // );
+      fetchLoggedInUser();
+      fetchUser(userId);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -39,7 +34,6 @@ const OthersProfile = () => {
 
   const establishFollowing = () => {
     if (selectedUser && loggedInUser) {
-      console.log("Users ===>", selectedUser, loggedInUser);
       setFollowingUser(
         selectedUser.followers.some((user) => user._id === loggedInUser._id)
       );
@@ -58,11 +52,9 @@ const OthersProfile = () => {
     try {
       setLoading(true);
       setFollowingUser((prev) => !prev);
-      console.log("followingUser inside handleFollow", followingUser);
       followingUser ? await unfollowUser() : await followUser();
       fetchData();
     } catch (error) {
-      console.error("Error during follow/unfollow:", error);
     } finally {
       setLoading(false);
     }
@@ -81,8 +73,6 @@ const OthersProfile = () => {
     posts,
     bio,
   } = selectedUser;
-
-  console.log("followingUser", followingUser);
 
   return (
     <div>
@@ -120,7 +110,7 @@ const OthersProfile = () => {
                     className="flex flex-col items-center"
                     onClick={() => setOpenFollowersModal(true)}
                   >
-                    {followers.length}{" "}
+                    {followers.length}
                     <span className="bg-slate-600 rounded-md text-white outline-4 px-4">
                       Followers
                     </span>
@@ -129,7 +119,7 @@ const OthersProfile = () => {
                     className="flex flex-col items-center"
                     onClick={() => setOpenFollowingModal(true)}
                   >
-                    {following.length}{" "}
+                    {following.length}
                     <span className="bg-slate-600 rounded-md text-white outline-4 px-4">
                       Following
                     </span>
@@ -151,20 +141,26 @@ const OthersProfile = () => {
           <div className="flex justify-center flex-wrap gap-10 mt-10">
             {posts && posts ? (
               posts.map((post) => (
-                <div className="flex flex-col p-4 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300">
+                <div
+                  className="flex flex-col p-4 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300"
+                  key={`div-${post._id}`}
+                >
                   <img
                     className="w-80 h-80 transition-transform transform hover:scale-105"
-                    key={post._id}
+                    key={`post-image-post._id`}
                     src={post.media && post.media[0] && post.media[0].url}
                     alt="post images"
                   />
                   <div className="flex gap-1">
-                    <span>{post.location}</span>
+                    <span key={`location-${post._id}`}>{post.location}</span>
                     <img
                       className="w-5 h-5 ml-40"
+                      key={`heart-icon-${post._id}`}
                       src="../src/assets/heart.png"
                     />
-                    <span>{post.likes && post.likes.length}</span>
+                    <span key={`likes-${post._id}`}>
+                      {post.likes && post.likes.length}
+                    </span>
                   </div>
                 </div>
               ))

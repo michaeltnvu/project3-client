@@ -1,24 +1,31 @@
-import { Button, Label, Modal, TextInput, FileInput } from "flowbite-react";
+import { Button, FileInput, Label, Modal } from "flowbite-react";
 import { useContext, useState } from "react";
-import { AuthContext } from "../context/auth.context";
+import { UserContext } from "../context/user.context";
+import { put } from "../services/authService";
+import { fileChange } from "../services/fileChange";
 
 const ProfilePictureModal = ({ editPicture, setEditPicture }) => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const { changeProfilePic } = useContext(UserContext);
 
-  const handleImageChange = (event) => {
-    setSelectedImage(event.target.files[0]);
+  const handleFileChange = (e) => {
+    setButtonDisabled(true);
+    fileChange(e)
+      .then((response) => {
+        console.log("Cloundinary response", response.data);
+        setSelectedImage(response.data.image);
+        setButtonDisabled(false);
+      })
+      .catch((err) => {
+        setButtonDisabled(true);
+        console.error("Error while uploading the file:", err);
+      });
   };
 
   const handleEditSubmit = () => {
-    e.preventDefault();
-
-    put(`/users/${userId}`, selectedImage)
-      .then(() => {
-        setEditPicture(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    changeProfilePic(selectedImage);
+    setEditPicture(false);
   };
 
   return (
@@ -26,28 +33,30 @@ const ProfilePictureModal = ({ editPicture, setEditPicture }) => {
       dismissible
       popup
       show={editPicture}
-      position="center"
+      size="lg"
       onClose={() => setEditPicture(false)}
     >
-      <Modal.Body className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-md p-8 w-96 max-h-full shadow-2xl">
-        <Modal.Header className="font-bold">Edit Profile Picture</Modal.Header>
-        <div className="space-y-6">
-          <div>
-            <div className="mb-2 block">
-              <Label htmlFor="profilePicture" value="Profile Picture" />
-            </div>
-            
-            <FileInput
-              id="profilePicture"
-              onChange={handleImageChange}
-              accept="image/*"
-              required
-            />
-          </div>
+      <Modal.Header className="mb-3 text-lg font-black">
+        Set your profile picture
+      </Modal.Header>
+      <Modal.Body className="shadow-2xl">
+        <div>
+          <Label htmlFor="profilePicture" value="Upload file" />
 
-          <div className="w-full space-x-4 flex justify-center gap-10">
-            <Button className="bg-sky-500 w-20 mb-8" onClick={handleEditSubmit}>
-              Update
+          <FileInput
+            id="profilePicture"
+            sizing="sm"
+            helperText="SVG, PNG, JPG, JPEG, or GIF"
+            onChange={(e) => handleFileChange(e)}
+            required
+          />
+          <div className="flex justify-end">
+            <Button
+              disabled={buttonDisabled}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-1 mt-3 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20"
+              onClick={handleEditSubmit}
+            >
+              Save
             </Button>
           </div>
         </div>
