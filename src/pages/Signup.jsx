@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo-white-vertical.png";
+import bg from "../assets/signup-background.png";
 import { AuthContext } from "../context/auth.context";
 import { post } from "../services/authService";
 
@@ -38,7 +39,7 @@ const Signup = () => {
   return (
     <div
       className="flex items-center justify-center h-screen bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url(../src/assets/signup-background.png)" }}
+      style={{ backgroundImage: `url(${bg})` }}
     >
       <div className="container flex items-center justify-center mx-auto">
         <div className="flex w-8/12 bg-white rounded-xl shadow-xl overflow-hidden">
