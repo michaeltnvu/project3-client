@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import eye from "../assets/eye-icon.png";
 import heart from "../assets/heart.png";
 import LoadingSvg from "../assets/loading.svg";
+import pen from "../assets/pen-icon.png";
+import trash from "../assets/trash-icon.png";
 import EditPostModal from "../components/EditPostModal";
 import FollowersModal from "../components/FollowersModal";
 import FollowingModal from "../components/FollowingModal";
@@ -100,6 +102,23 @@ const Profile = () => {
 
   useEffect(() => {
     fetchLoggedInUser();
+
+    const handleScroll = () => {
+      const myBtn = document.getElementById("myBtn");
+      if (myBtn) {
+        myBtn.style.display =
+          document.body.scrollTop > 20 ||
+          document.documentElement.scrollTop > 20
+            ? "block"
+            : "none";
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -126,6 +145,11 @@ const Profile = () => {
     posts,
   } = loggedInUser;
 
+  const scrollToTop = () => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  };
+
   return (
     <div>
       {loggedInUser && (
@@ -149,7 +173,7 @@ const Profile = () => {
               {hoverProfilePic && (
                 <button onClick={() => setEditPicture(true)}>
                   <img
-                    src="../src/assets/pen-icon.png"
+                    src={pen}
                     className="w-8 h-8 rounded-md absolute top-0 right-0 drop-shadow-lg"
                   />
                 </button>
@@ -235,7 +259,7 @@ const Profile = () => {
                         >
                           <img
                             key={`9/${post._id}`}
-                            src="../src/assets/pen-icon.png"
+                            src={pen}
                             alt="Button Image"
                             className="w-10 h-10"
                           />
@@ -247,7 +271,7 @@ const Profile = () => {
                         >
                           <img
                             key={`11/${post._id}`}
-                            src="../src/assets/trash-icon.png"
+                            src={trash}
                             alt="Button Image"
                             className="w-10 h-10"
                           />
@@ -259,7 +283,7 @@ const Profile = () => {
                         >
                           <img
                             key={`13/${post._id}`}
-                            src="../src/assets/eye-icon.png"
+                            src={eye}
                             alt="Button Image"
                             className="w-10 h-10"
                           />
@@ -281,6 +305,28 @@ const Profile = () => {
           </div>
         </div>
       )}
+      <button
+        onClick={scrollToTop}
+        id="myBtn"
+        title="Go to top"
+        className="hidden fixed bottom-8 left-8 z-50 text-white text-sm bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300 rounded-full px-2 py-2 cursor-pointer transition-all duration-300 ease-in-out"
+      >
+        <svg
+          className="w-[17px] h-[17px] text-white dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 10 14"
+        >
+          <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.7"
+            d="M5 13V1m0 0L1 5m4-4 4 4"
+          />
+        </svg>
+      </button>
       <FollowersModal
         openModal={openFollowersModal}
         setOpenModal={setOpenFollowersModal}

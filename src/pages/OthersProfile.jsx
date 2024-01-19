@@ -1,15 +1,29 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import eye from "../assets/eye-icon.png";
 import LoadingSvg from "../assets/loading.svg";
+import pen from "../assets/pen-icon.png";
+import trash from "../assets/trash-icon.png";
 import FollowersModal from "../components/FollowersModal";
 import FollowingModal from "../components/FollowingModal";
+import PostDetailsModal from "../components/PostDetailsModal";
+import PostContext from "../context/post.context";
 import { UserContext } from "../context/user.context";
+import { post } from "../services/authService";
 
 const OthersProfile = () => {
   const [openFollowersModal, setOpenFollowersModal] = useState(false);
   const [openFollowingModal, setOpenFollowingModal] = useState(false);
+  const [openPostDetailsModal, setOpenPostDetailsModal] = useState(false);
   const [followingUser, setFollowingUser] = useState(null);
+  const [hoveredPost, setHoveredPost] = useState(null);
+  const [selectedPost, setSelectedPost] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const [newComment, setNewComment] = useState({
+    comment: "",
+  });
+
   const {
     fetchLoggedInUser,
     fetchUser,
@@ -18,6 +32,9 @@ const OthersProfile = () => {
     unfollowUser,
     followUser,
   } = useContext(UserContext);
+
+  const { deleteComment } = useContext(PostContext);
+
   const { userId } = useParams();
 
   const fetchData = async () => {
@@ -60,6 +77,52 @@ const OthersProfile = () => {
     }
   };
 
+  const handleOpenPostDetailsModal = (postId) => {
+    const foundPost = selectedUser.posts.find((post) => post._id === postId);
+    setSelectedPost(foundPost);
+    setOpenPostDetailsModal(true);
+  };
+
+  const handleClosePostDetailsModal = () => {
+    setOpenPostDetailsModal(false);
+    setSelectedPost({});
+    setNewComment({ comment: "" });
+  };
+
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    post(`/posts/${selectedPost._id}/comments`, newComment)
+      .then(async () => {
+        const updatedComments = [
+          ...selectedPost.comments,
+          {
+            createdByUser: {
+              profileImage: loggedInUser.profileImage,
+              username: loggedInUser.username,
+            },
+            comment: newComment.comment,
+          },
+        ];
+        setNewComment({ comment: "" });
+        setSelectedPost((prev) => ({
+          ...prev,
+          comments: updatedComments,
+        }));
+      })
+      .catch((err) => console.error("Error submitting post", err));
+  };
+
+  const handleDeleteComment = (commentId) => {
+    deleteComment(commentId);
+    const updatedComments = selectedPost.comments.filter(
+      (comment) => comment._id !== commentId
+    );
+    setSelectedPost((prev) => ({
+      ...prev,
+      comments: updatedComments,
+    }));
+  };
+
   if (loading || !selectedUser) return <img src={LoadingSvg} />;
 
   const {
@@ -99,6 +162,14 @@ const OthersProfile = () => {
               </div>
               <div className="user-handle">@{username}</div>
               <div>
+                <button
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-1 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20"
+                  onClick={handleFollow}
+                >
+                  {!loading && followingUser ? "Unfollow" : "Follow"}
+                </button>
+              </div>
+              <div>
                 <div className="flex justify-center space-x-60 mt-2 font-bold">
                   <div className="flex flex-col items-center cursor-pointer">
                     {posts.length}
@@ -125,41 +196,85 @@ const OthersProfile = () => {
                     </span>
                   </div>
                 </div>
-                <div>
-                  <button
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-1 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20"
-                    onClick={handleFollow}
-                  >
-                    {!loading && followingUser ? "Unfollow" : "Follow"}
-                  </button>
-                </div>
               </div>
             </div>
 
             <div className="mt-5">{bio}</div>
           </div>
-          <div className="flex justify-center flex-wrap gap-10 mt-10">
+          <div className="flex justify-center flex-wrap gap-5 my-10">
             {posts && posts ? (
               posts.map((post) => (
                 <div
-                  className="flex flex-col p-4 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300"
-                  key={`div-${post._id}`}
+                  key={post._id}
+                  className="post-container relative"
+                  onMouseEnter={() => setHoveredPost(post._id)}
+                  onMouseLeave={() => setHoveredPost(null)}
                 >
-                  <img
-                    className="w-80 h-80 transition-transform transform hover:scale-105"
-                    key={`post-image-post._id`}
-                    src={post.media && post.media[0] && post.media[0].url}
-                    alt="post images"
-                  />
-                  <div className="flex gap-1">
-                    <span key={`location-${post._id}`}>{post.location}</span>
+                  <div
+                    className="flex flex-col p-4 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300 transition-transform transform hover:scale-105"
+                    key={`div-${post._id}`}
+                  >
                     <img
-                      className="w-5 h-5 ml-40"
-                      key={`heart-icon-${post._id}`}
-                      src="../src/assets/heart.png"
+                      className="w-80 h-80"
+                      key={`post-image-post._id`}
+                      src={post.media && post.media[0] && post.media[0].url}
+                      alt="post images"
                     />
-                    <span key={`likes-${post._id}`}>
-                      {post.likes && post.likes.length}
+                    <div className="flex justify-between">
+                      <span key={`location-${post._id}`} className="mb-2">
+                        {post.location}
+                      </span>
+                      <span key={`likes-${post._id}`}>
+                        {post.likes && post.likes.length} likes
+                      </span>
+                    </div>
+                    {hoveredPost === post._id && (
+                      <div key={`buttons${post._id}`}>
+                        <button
+                          key={`8/${post._id}`}
+                          className="hover-button px-4 py-2 rounded-md absolute top-0 right-10 mt-2 mr-2 drop-shadow-lg"
+                          onClick={() => handleOpenModal(post._id)}
+                        >
+                          <img
+                            key={`9/${post._id}`}
+                            src={pen}
+                            alt="Button Image"
+                            className="w-10 h-10"
+                          />
+                        </button>
+                        <button
+                          key={`10/${post._id}`}
+                          className="hover-button px-2 py-2 rounded-md absolute top-0 right-0 mt-2 mr-2 drop-shadow-lg bg-opacity-50"
+                          onClick={() => handleDelete(`1/${post._id}`)}
+                        >
+                          <img
+                            key={`11/${post._id}`}
+                            src={trash}
+                            alt="Button Image"
+                            className="w-10 h-10"
+                          />
+                        </button>
+                        <button
+                          key={`12/${post._id}`}
+                          className="bg-gray-500 bg-opacity-50 p-2 rounded-md absolute top-[175px] left-1/2 transform -translate-x-1/2 -translate-y-1/3"
+                          onClick={() =>
+                            handleOpenPostDetailsModal(hoveredPost)
+                          }
+                        >
+                          <img
+                            key={`13/${post._id}`}
+                            src={eye}
+                            alt="Button Image"
+                            className="w-10 h-10"
+                          />
+                        </button>
+                      </div>
+                    )}
+                    <span
+                      key={`14/${post._id}`}
+                      className="text-center mt-3 mb-1 font-amarillo"
+                    >
+                      "{post.caption}"
                     </span>
                   </div>
                 </div>
@@ -178,6 +293,15 @@ const OthersProfile = () => {
             openModal={openFollowingModal}
             setOpenModal={setOpenFollowingModal}
             following={following}
+          />
+          <PostDetailsModal
+            openModal={openPostDetailsModal}
+            setCloseModal={handleClosePostDetailsModal}
+            selectedPost={selectedPost}
+            handleCommentSubmit={handleCommentSubmit}
+            newComment={newComment}
+            setNewComment={setNewComment}
+            handleDeleteComment={handleDeleteComment}
           />
         </div>
       )}

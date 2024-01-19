@@ -16,7 +16,17 @@ const Explore = () => {
     const fetchUsers = async () => {
       try {
         const response = await get("/users");
-        setUsers(response.data);
+        console.log("response", response);
+        console.log("loggedInUser", loggedInUser);
+        const filteredUsers = response.data.filter((user) => {
+          return (
+            user._id !== loggedInUser._id &&
+            !loggedInUser.following.some(
+              (followedUser) => user._id === followedUser._id
+            )
+          );
+        });
+        setUsers(filteredUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
