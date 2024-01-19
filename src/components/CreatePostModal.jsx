@@ -75,11 +75,12 @@ const CreatePostModal = ({ openModal, setOpenModal }) => {
   };
 
   const handleSubmit = async () => {
+    console.log("Adding post from submit --->", reqBody);
     try {
       await addPost(reqBody);
       onCloseModal();
     } catch (err) {
-      console.error("Error creating post:", err);
+      console.error("Error creating post line 84:", err);
       throw err;
     }
   };

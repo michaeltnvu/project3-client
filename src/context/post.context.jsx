@@ -5,7 +5,6 @@ const PostContext = createContext();
 
 export const PostProvider = ({ children }) => {
   const [posts, setPosts] = useState([]);
-  const [post, setPost] = useState([]);
 
   const fetchPosts = () => {
     get(`/posts`)
@@ -13,19 +12,15 @@ export const PostProvider = ({ children }) => {
       .catch((error) => console.error("Error fetching posts:", error));
   };
 
-  const fetchPost = (postId) => {
-    get(`/posts/${postId}`)
-      .then((res) => setPost(res.data))
-      .catch((err) => console.error("Error fetching single post:", err));
-  };
-
   const addPost = async (newPost) => {
+    console.log("Add Post fuction ===>", newPost);
     try {
       const response = await post("/posts", newPost);
       const createdPost = response.data;
+      console.log("Created post ====>", createdPost);
       return createdPost;
     } catch (err) {
-      console.error("Error adding post:", err);
+      console.error("Error adding post in context:", err);
       throw err;
     }
   };
@@ -67,7 +62,6 @@ export const PostProvider = ({ children }) => {
         updatePost,
         deletePost,
         deleteComment,
-        fetchPost,
       }}
     >
       {children}
