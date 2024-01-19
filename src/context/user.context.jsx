@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { get } from "../services/authService";
+import { get, put } from "../services/authService";
 import { AuthContext } from "./auth.context";
 
 const UserContext = createContext();
@@ -9,10 +9,20 @@ const UserProvider = ({ children }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const { user } = useContext(AuthContext);
 
-  const fetchLoggedInUser = () => {
-    get(`/users/${user._id}`)
-      .then((foundUser) => setLoggedInUser(foundUser.data))
-      .catch((error) => console.error("Error fetching logged-in user:", error));
+  const fetchLoggedInUser = async () => {
+    try {
+      if (!user) {
+        console.log("Retrieving user");
+        return;
+      }
+      await get(`/users/${user._id}`)
+        .then((foundUser) => setLoggedInUser(foundUser.data))
+        .catch((error) =>
+          console.error("Error fetching logged-in user:", error)
+        );
+    } catch (error) {
+      console.error("Error fetching logged-in user:", error);
+    }
   };
 
   const fetchUser = (userId) => {
@@ -21,29 +31,79 @@ const UserProvider = ({ children }) => {
       .catch((error) => console.error("Error fetching selected user:", error));
   };
 
-  const unfollowUser = () => {
-    const updateFollowers = selectedUser.followers.filter(
-      (user) => user._id !== loggedInUser._id
-    );
-    const updateFollowing = loggedInUser.following.filter(
-      (user) => user._id !== selectedUser._id
-    );
-    put(`/users/${selectedUser._id}`, { followers: updateFollowers })
-      .then((updatedUser) => setSelectedUser(updatedUser.data))
-      .then(() => {
-        put(`/users/${loggedInUser._id}`, { following: updateFollowing })
-          .then((updatedUser) => setLoggedInUser(updatedUser.data))
-          .catch((error) =>
-            console.error(
-              "Error removing selected user from following list:",
-              error
-            )
-          );
-      })
-      .catch((error) => console.error("Error unfollowing user:", error));
+  const unfollowUser = async () => {
+    try {
+      const updateFollowers = await selectedUser.followers.filter(
+        (user) => user._id !== loggedInUser._id
+      );
+      const updateFollowing = await loggedInUser.following.filter(
+        (user) => user._id !== selectedUser._id
+      );
+
+      await put(`/users/${selectedUser._id}`, { followers: updateFollowers })
+        .then((updatedUser) => {
+          setSelectedUser(updatedUser.data);
+        })
+        .then(() => {
+          put(`/users/${loggedInUser._id}`, { following: updateFollowing })
+            .then((updatedUser) => setLoggedInUser(updatedUser.data))
+            .catch((error) =>
+              console.error(
+                "Error removing selected user from following list:",
+                error
+              )
+            );
+        })
+        .catch((error) => console.error("Error unfollowing user:", error));
+    } catch (err) {
+      console.error("Error unfollowing user:", err);
+    }
   };
 
-  console.log("selectedUser", selectedUser);
+  const followUser = async () => {
+    try {
+      const addFollower = await [
+        ...selectedUser.followers,
+        {
+          _id: loggedInUser._id,
+          profileImage: loggedInUser.profileImage,
+          username: loggedInUser.username,
+        },
+      ];
+      const addFollowing = await [
+        ...loggedInUser.following,
+        {
+          _id: selectedUser._id,
+          profileImage: selectedUser.profileImage,
+          username: selectedUser.username,
+        },
+      ];
+
+      await put(`/users/${selectedUser._id}`, { followers: addFollower })
+        .then((updatedUser) => {
+          console.log("follow user context:", updatedUser.data);
+          setSelectedUser(updatedUser.data);
+        })
+        .then(() => {
+          put(`/users/${loggedInUser._id}`, { following: addFollowing })
+            .then((updatedUser) => setLoggedInUser(updatedUser.data))
+            .catch((error) =>
+              console.error(
+                "Error adding selected user to following list:",
+                error
+              )
+            );
+        })
+        .catch((error) =>
+          console.error(
+            "Error adding logged-in user from followers list:",
+            error
+          )
+        );
+    } catch (err) {
+      console.error("Error following user:", err);
+    }
+  };
 
   return (
     <UserContext.Provider
@@ -53,6 +113,7 @@ const UserProvider = ({ children }) => {
         loggedInUser,
         selectedUser,
         unfollowUser,
+        followUser,
       }}
     >
       {children}

@@ -9,43 +9,66 @@ const OthersProfile = () => {
   const [openFollowersModal, setOpenFollowersModal] = useState(false);
   const [openFollowingModal, setOpenFollowingModal] = useState(false);
   const [followingUser, setFollowingUser] = useState(null);
-  const [followStatus, setFollowingStatus] = useState(null);
+  const [loading, setLoading] = useState(false);
   const {
     fetchLoggedInUser,
     fetchUser,
     loggedInUser,
     selectedUser,
     unfollowUser,
+    followUser,
   } = useContext(UserContext);
   const { userId } = useParams();
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       await fetchLoggedInUser();
       await fetchUser(userId);
-      await setFollowingUser(
-        selectedUser.followers.some((user) => user._id === loggedInUser._id)
-      );
+      // setFollowingUser(
+      //   selectedUser &&
+      //     loggedInUser &&
+      //     selectedUser.followers.some((user) => user._id === loggedInUser._id)
+      // );
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  const establishFollowing = () => {
+    if (selectedUser && loggedInUser) {
+      console.log("Users ===>", selectedUser, loggedInUser);
+      setFollowingUser(
+        selectedUser.followers.some((user) => user._id === loggedInUser._id)
+      );
+    }
+  };
+
+  useEffect(() => {
+    establishFollowing();
+  }, [selectedUser, loggedInUser]);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, [followStatus]);
-
-  console.log("followStatus", followStatus);
-
-  const handleFollow = () => {
-    unfollowUser();
+  const handleFollow = async () => {
+    try {
+      setLoading(true);
+      setFollowingUser((prev) => !prev);
+      console.log("followingUser inside handleFollow", followingUser);
+      followingUser ? await unfollowUser() : await followUser();
+      fetchData();
+    } catch (error) {
+      console.error("Error during follow/unfollow:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!selectedUser) return <img src={LoadingSvg} />;
+  if (loading || !selectedUser) return <img src={LoadingSvg} />;
 
   const {
     bannerImage,
@@ -58,6 +81,8 @@ const OthersProfile = () => {
     posts,
     bio,
   } = selectedUser;
+
+  console.log("followingUser", followingUser);
 
   return (
     <div>
@@ -107,7 +132,7 @@ const OthersProfile = () => {
                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-1 py-2.5 me-2 mb-2 mt-5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-20"
                   onClick={handleFollow}
                 >
-                  {followingUser ? "Unfollow" : "Follow"}
+                  {!loading && followingUser ? "Unfollow" : "Follow"}
                 </button>
                 </div>
               </div>
@@ -115,27 +140,31 @@ const OthersProfile = () => {
 
             <div className="mt-5">{bio}</div>
           </div>
-
           <div className="flex justify-center flex-wrap gap-10 mt-10">
-            {posts.map((post) => (
-              <div className="flex flex-col p-4 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300"> 
-              <img className="w-80 h-80 transition-transform transform hover:scale-105 " key={post._id} src={post.media[0].url} alt="post images" />
-              <div className="flex justify-between mt-2"> </div>
-              <div className="flex gap-1">
-                <span>{post.location}</span>
-                <img
-                  className="w-5 h-5 ml-40"
-                  src="../src/assets/heart.png"
-                />
-                <span>{post.likes.length}</span>
-                
-                <div classname="flex flex-col">
-                
+            {posts && posts ? (
+              posts.map((post) => (
+                <div className="flex flex-col p-4 shadow-2xl outline outline-2 outline-offset-2 outline-gray-300">
+                  <img
+                    className="w-80 h-80 transition-transform transform hover:scale-105"
+                    key={post._id}
+                    src={post.media && post.media[0] && post.media[0].url}
+                    alt="post images"
+                  />
+                  <div className="flex gap-1">
+                    <span>{post.location}</span>
+                    <img
+                      className="w-5 h-5 ml-40"
+                      src="../src/assets/heart.png"
+                    />
+                    <span>{post.likes.length}</span>
                    </div>
-              </div>
-              </div>
-            ))}
-            </div>
+                  </div>
+              ))
+            ) : (
+              <span key="no-posts">No posts available</span>
+            )}
+          </div>
+
           <FollowersModal
             openModal={openFollowersModal}
             setOpenModal={setOpenFollowersModal}
