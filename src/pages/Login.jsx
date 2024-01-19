@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo-white-vertical.png";
 import { AuthContext } from "../context/auth.context";
 import { post } from "../services/authService";
 
@@ -41,11 +42,7 @@ const Login = () => {
             <h1 className="text-white text-2xl mb-3">
               What adventure will you share today?
             </h1>
-            <img
-              className="w-80 mt-5 pl-10 pt-20"
-              src="../src/assets/logo-white-vertical.png"
-              alt="Logo"
-            />
+            <img className="w-80 mt-5 pl-10 pt-20" src={logo} alt="Logo" />
           </div>
 
           <div className="w-1/2 py-16 px-12">

@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo-white-vertical.png";
 import { AuthContext } from "../context/auth.context";
 import { post } from "../services/authService";
 
@@ -44,11 +45,7 @@ const Signup = () => {
           <div className="w-1/2 py-16 px-12 bg-gradient-to-r from-cyan-500 to-blue-500 text-white">
             <h1 className="text-3xl">Welcome to Pathfindr.</h1>
             <span className="text-xl">The start of your next adventure.</span>
-            <img
-              className="w-80 mt-5 pl-10 pt-20"
-              src="../src/assets/logo-white-vertical.png"
-              alt="Logo"
-            />
+            <img className="w-80 mt-5 pl-10 pt-20" src={logo} alt="Logo" />
           </div>
 
           <div className="w-1/2 py-16 px-12">

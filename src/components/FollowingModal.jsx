@@ -21,7 +21,7 @@ const FollowingModal = ({ openModal, setOpenModal, following }) => {
         <Modal.Body className="shadow-2xl">
           <div>
             {following.length === 0 ? (
-              <span>You are not following anyone</span>
+              <span>Not following anyone</span>
             ) : (
               <div className="flex flex-col">
                 {following.map((user, index) => (
