@@ -7,7 +7,7 @@ import PostDetailsModal from "../components/PostDetailsModal";
 import ProfilePictureModal from "../components/ProfilePictureModal";
 import PostContext from "../context/post.context";
 import { UserContext } from "../context/user.context";
-import { post } from "../services/authService";
+import { get, post } from "../services/authService";
 
 const Profile = () => {
   const {
@@ -142,7 +142,10 @@ const Profile = () => {
                 alt="profile image"
               />
               <button className="" onClick={() => setEditPicture(true)}>
-                Edit Picture
+                <img
+                  src="../src/assets/pen-icon.png"
+                  className="w-10 h-10 rounded-md absolute top-0 right-0 mt-2 mr-2 drop-shadow-lg"
+                />
               </button>
             </div>
           </div>
@@ -196,12 +199,13 @@ const Profile = () => {
                     key={post._id}
                   >
                     <img
-                      className="w-80 h-80 transition-transform transform hover:scale-105 "
-                      src={post.media && post.media[0] && post.media[0].url}
-                      alt="post images"
-                    />
-                    <div className="flex justify-between mt-2">
-                      <span>{post.location}</span>
+                    className="w-80 h-80 transition-transform transform hover:scale-105 "
+                    src={post.media && post.media[0] && post.media[0].url}
+                    alt="post images"
+                  />
+                  <div className="flex justify-between mt-2"> </div>
+                  <div className="flex gap-1">
+                    <span>{post.location}</span>
                       <div className="flex">
                         <img
                           className="w-5 h-5 ml-40"
