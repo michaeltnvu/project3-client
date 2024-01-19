@@ -267,7 +267,7 @@ const Profile = () => {
                         <button
                           key={`10/${post._id}`}
                           className="hover-button px-2 py-2 rounded-md absolute top-0 right-0 mt-2 mr-2 drop-shadow-lg bg-opacity-50"
-                          onClick={() => handleDelete(`1/${post._id}`)}
+                          onClick={() => handleDelete(post._id)}
                         >
                           <img
                             key={`11/${post._id}`}
@@ -292,7 +292,7 @@ const Profile = () => {
                     )}
                     <span
                       key={`14/${post._id}`}
-                      className="text-center mt-3 mb-1 font-amarillo"
+                      className="text-center mt-3 mb-1 font-kalam"
                     >
                       "{post.caption}"
                     </span>

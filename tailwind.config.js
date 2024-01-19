@@ -9,6 +9,7 @@ export default {
     extend: {
       fontFamily: {
         amarillo: ["Amarillo", "sans-serif"],
+        kalam: ["Kalam", "sans-serif"],
       },
       letterSpacing: {
         tightest: "-.075em",

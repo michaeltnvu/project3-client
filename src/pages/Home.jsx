@@ -69,7 +69,7 @@ const Home = () => {
               </div>
               <span
                 key={`14/${post._id}`}
-                className="text-center mt-3 mb-1 font-amarillo"
+                className="text-center mt-3 mb-1 font-kalam"
               >
                 "{post.caption}"
               </span>
